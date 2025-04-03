@@ -28,8 +28,8 @@ const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
 }
 
 //------------------------------------------------------------------------
-// Moves a piece and returns a status code
-int ChessBoard::movePiece(std::pair<int, int> from, std::pair<int, int> to) {
+// Check the movement of a piece and returns a status code
+int ChessBoard::checkMovement(std::pair<int, int> from, std::pair<int, int> to) {
     if (!isOccupied(from.first, from.second)) {
         std::cout << "No piece at the source square!\n";
         return NO_PIECE;

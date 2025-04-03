@@ -9,7 +9,7 @@ public:
 
     ChessPiece(bool isWhite, char pieceType, std::pair<int, int> pos);
     virtual ~ChessPiece() = default;
-    virtual int isMoveValid(const ChessBoard& board, std::pair<int, int> newPos) const = 0; 
+    virtual int checkMovement(const ChessBoard& board, std::pair<int, int> newPos) const = 0;
     std::pair<int, int> getPosition() const;
     char getPieceType() const;
     bool getColor() const;

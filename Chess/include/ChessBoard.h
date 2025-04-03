@@ -18,8 +18,8 @@ public:
     // Returns a pointer to the piece at a given position (const to prevent modification)
     const ChessPiece* getPieceAt(int row, int col) const;
 
-    // Moves a piece and returns a status code
-    int movePiece(std::pair<int, int> from, std::pair<int, int> to);
+    // Check the movement of a piece and returns a status code
+    int checkMovement(std::pair<int, int> from, std::pair<int, int> to);
 
     // Prints the board (for debugging)
     void printBoard() const;
