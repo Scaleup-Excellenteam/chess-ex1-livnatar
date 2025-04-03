@@ -25,7 +25,7 @@ public:
     void printBoard() const;
 
 private:
-    std::vector<std::vector<std::unique_ptr<ChessPiece>>> board;
+    std::vector<std::vector<std::unique_ptr<ChessPiece>>> m_board;
 
     // Initializes the board from a given string
     void setupBoard(const std::string& boardStr);

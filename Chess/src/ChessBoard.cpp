@@ -7,9 +7,10 @@
 //------------------------------------------------------------------------
 // Constructor that initializes the board using a string representation
 ChessBoard::ChessBoard(const std::string& boardStr) 
-    : board(8, std::vector<std::unique_ptr<ChessPiece>>(8, nullptr)) {
+    : m_board(8, std::vector<std::unique_ptr<ChessPiece>>(8, nullptr)) {
     if (boardStr.size() != 64) {
-        throw std::invalid_argument("Board string must be exactly 64 characters long.");
+       // throw std::invalid_argument("Board string must be exactly 64 characters long.");
+        std::cout >> "Board string must be exactly 64 characters long." >> std::endl
     }
     setupBoard(boardStr);
 }
@@ -17,13 +18,13 @@ ChessBoard::ChessBoard(const std::string& boardStr)
 //------------------------------------------------------------------------
 // Checks if a given square is occupied
 bool ChessBoard::isOccupied(int row, int col) const {
-    return board[row][col] != nullptr;
+    return m_board[row][col] != nullptr;
 }
 
 //------------------------------------------------------------------------
 // Returns a pointer to the piece at a given position
 const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
-    return board[row][col].get();
+    return m_board[row][col].get();
 }
 
 //------------------------------------------------------------------------
@@ -34,11 +35,11 @@ int ChessBoard::movePiece(std::pair<int, int> from, std::pair<int, int> to) {
         return NO_PIECE;
     }
 
-    ChessPiece* piece = board[from.first][from.second].get();
+    ChessPiece* piece = m_board[from.first][from.second].get();
     int moveStatus = piece->isMoveValid(*this, to);
     if (moveStatus == MOVE_SUCCESS) {
-        board[to.first][to.second] = std::move(board[from.first][from.second]);
-        board[to.first][to.second]->setPosition(to);
+        m_board[to.first][to.second] = std::move(m_board[from.first][from.second]);
+        m_board[to.first][to.second]->setPosition(to);
         return MOVE_SUCCESS;
     }
 
@@ -49,15 +50,16 @@ int ChessBoard::movePiece(std::pair<int, int> from, std::pair<int, int> to) {
 //------------------------------------------------------------------------
 // Sets up the board using a given string
 void ChessBoard::setupBoard(const std::string& boardStr) {
+
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             char pieceChar = boardStr[i * 8 + j];
             std::pair<int, int> pos = { i, j };
 
             switch (pieceChar) {
-            case 'R': board[i][j] = std::make_unique<Rook>(true, 'R', pos); break;
-            case 'r': board[i][j] = std::make_unique<Rook>(false, 'r', pos); break;
-            case '#': board[i][j] = nullptr; break; // Empty square
+            case 'R': m_board[i][j] = std::make_unique<Rook>(true, 'R', pos); break;
+            case 'r': m_board[i][j] = std::make_unique<Rook>(false, 'r', pos); break;
+            case '#': m_board[i][j] = nullptr; break; // Empty square
                 // More pieces will be added later
             default: break;
             }
@@ -70,8 +72,8 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
 void ChessBoard::printBoard() const {
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            if (board[i][j])
-                std::cout << board[i][j]->getPieceType() << " ";
+            if (m_board[i][j])
+                std::cout << m_board[i][j]->getPieceType() << " ";
             else
                 std::cout << ". ";
         }

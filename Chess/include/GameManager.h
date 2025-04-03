@@ -1,29 +1,22 @@
 
 #pragma once
+#include "ChessBoard.h"
+#include "GameConstants.h"
+#include <string>
 
-
-class GameManager
-{
+class GameManager {
 public:
+    GameManager(const std::string& boardStr);
 
-    GameManager();
-    //Controller(Board& board, int col, int windowLength);
-    //Controller(int col, int row, int windowLength);
-    //void run(bool& levelExists, bool& pressX);
-   // void handleClick(sf::Event::MouseButtonEvent& event, ButtonType& pressed,
-       // bool& levelExists, bool& mouseExist, int& xMouse, int& yMouse);
+    // Processes a move in chess notation (e.g., "a7c6") and returns status code
+    int checkMovement(const std::string& move);
 
 private:
-    /*    sf::RenderWindow m_window;
-    Board m_board;
-    std::vector<sf::Texture> m_icons;
-    ToolBar m_toolBar;
+    ChessBoard m_chessBoard;
 
-    void updateVector();
-    void performPress(ButtonType& pressed, bool& levelExists);
-    void handleClickToolBar(bool&, ButtonType&, const sf::Vector2f&);
-    void handleClickBoard(const sf::Vector2f&, ButtonType&, bool&, int&, int&);
-    void setBackground(sf::Texture& backgroundTexture, sf::Sprite& background);
-    void print(sf::Sprite& background, ButtonType pressed);*/
-
+    // Converts chess notation (e.g., "a7") to board indices (row, col)
+    std::pair<int, int> convertPosition(const std::string& pos) const;
 };
+
+
+
