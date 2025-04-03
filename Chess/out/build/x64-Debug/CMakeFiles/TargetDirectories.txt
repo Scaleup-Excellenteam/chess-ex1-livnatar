@@ -1,0 +1,7 @@
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/CMakeFiles/Chess.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/include/CMakeFiles/edit_cache.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/include/CMakeFiles/rebuild_cache.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/src/CMakeFiles/edit_cache.dir
+C:/Users/livna/source/repos/Scaleup-Excellenteam/chess-ex1-livnatar/Chess/out/build/x64-Debug/src/CMakeFiles/rebuild_cache.dir
