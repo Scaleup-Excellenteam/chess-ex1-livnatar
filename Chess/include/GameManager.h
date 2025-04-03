@@ -13,9 +13,13 @@ public:
 
 private:
     ChessBoard m_chessBoard;
+    bool m_isWhiteTurn; // true = White's turn, false = Black's turn
 
     // Converts chess notation (e.g., "a7") to board indices (row, col)
     std::pair<int, int> convertPosition(const std::string& pos) const;
+
+    void switchTurn();
+    bool isCheck();
 };
 
 

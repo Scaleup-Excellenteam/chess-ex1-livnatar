@@ -5,7 +5,7 @@
 
 //------------------------------------------------------------------------
 // Constructor initializes the chessboard from a string
-GameManager::GameManager(const std::string& boardStr) : m_chessBoard(boardStr) {}
+GameManager::GameManager(const std::string& boardStr) : m_chessBoard(boardStr),m_isWhiteTurn(true){}
 
 //------------------------------------------------------------------------
 // Converts chess notation (e.g., "a7") to board indices (row, col)
@@ -40,4 +40,16 @@ int GameManager::checkMovement(const std::string& move) {
 
     // Call ChessBoard::movePiece and return the status code
     return m_chessBoard.movePiece(from, to);
+}
+
+//------------------------------------------------------------------------
+//Switches the turn between white and black 
+void GameManager::switchTurn() {
+
+}
+
+//------------------------------------------------------------------------
+//Checks if the current player is in check
+bool GameManager::isCheck() {
+
 }

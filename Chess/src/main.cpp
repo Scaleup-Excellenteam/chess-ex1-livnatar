@@ -5,7 +5,7 @@
 int main()
 {
 	//string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
-//	string board = "##########K###############################R#############r#r#####";
+    //string board = "##########K###############################R#############r#r#####";
 	string board = "R######R################################################r######r";
 	Chess a(board);
 	//GameManager gameManager(board);   //create the manger of the game
