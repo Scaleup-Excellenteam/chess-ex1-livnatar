@@ -76,6 +76,8 @@ int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<i
     //Step 4: Call ChessPiece to validate the move   
     int moveStatus = sourcePiece->checkMovement(*this, to);
 
+
+
     return moveStatus;
 }
 //------------------------------------------------------------------------
@@ -98,7 +100,10 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
 
 
 
-            default: break;
+            default:
+                std::cout << "Warning: Unknown piece character '" << pieceChar
+                    << "' at position (" << i << ", " << j << ")." << std::endl; 
+                break;
             }
         }
     }
@@ -108,6 +113,7 @@ void ChessBoard::movePiece(const std::pair<int, int>& from, const std::pair<int,
     
     m_board[to.first][to.second] = std::move(m_board[from.first][from.second]);
     m_board[to.first][to.second]->setPosition(to);
+    m_board[from.first][from.second] = nullptr; // Clear the source square
 }
 //------------------------------------------------------------------------
 // Prints the board for debugging purposes
