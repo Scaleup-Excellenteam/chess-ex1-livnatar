@@ -1,9 +1,6 @@
 
 #pragma once
 
-const int INVALID_MOVE = -1;
-const int NO_PIECE = -2;
-
 // Status codes for move validation
 
 // Move cannot be performed - each response code represents a different reason
@@ -21,7 +18,7 @@ const int MOVE_SUCCESS_CHECK = 41;  // Valid move that results in a check: same 
 // Additional status codes can be added here later
 
 // Enum for piece types (if needed in the future)
-enum class PieceType {
+/*enum class PieceType {
     NONE,  // Empty square
     PAWN,
     KNIGHT,
@@ -29,4 +26,4 @@ enum class PieceType {
     ROOK,
     QUEEN,
     KING
-};
+};*/
