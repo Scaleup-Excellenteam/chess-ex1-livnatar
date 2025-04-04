@@ -31,3 +31,21 @@ Chess/out/build/
 # Ignore temporary image cache
 img/cache/
 
+
+# Additional CMake and build-related files to ignore
+
+# CMake-generated files
+*.cmake
+*.ninja
+*.ninja_deps
+*.ninja_log
+
+# Debugging and intermediate files
+*.pdb
+*.ilk
+*.obj
+
+# Ignore CMakeCache.txt (CMake configuration cache file)
+CMakeCache.txt
+
+
