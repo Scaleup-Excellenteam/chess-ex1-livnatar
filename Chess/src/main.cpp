@@ -8,7 +8,7 @@ int main()
     //string board = "##########K###############################R#############r#r#####";
 	string board = "R######R################################################r######r";
 	Chess a(board);
-	//GameManager gameManager(board);   //create the manger of the game
+	GameManager gameManager(board);   //create the manger of the game
 
 	int codeResponse = 0;
 	string res = a.getInput();
@@ -30,9 +30,9 @@ int main()
 
 		/**/ 
 		{ // put your code here instead that code
-			cout << "code response >> ";
-			cin >> codeResponse;
-			//codeResponse = gameManager.checkMovement(res);
+			//cout << "code response >> ";
+			//cin >> codeResponse;
+			codeResponse = gameManager.checkMovement(res);
 		}
 		/**/
 

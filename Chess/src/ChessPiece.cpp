@@ -2,17 +2,17 @@
 #include "ChessPiece.h"
 
 //------------------------------------------------------------------------
-ChessPiece::ChessPiece(bool isWhite, char pieceType, std::pair<int, int> pos)
-    : m_isWhite(isWhite), m_pieceType(type), m_position(pos) {};
+ChessPiece::ChessPiece(bool isWhite, char pieceType, const std::pair<int, int>& pos)
+    : m_isWhite(isWhite), m_pieceType(pieceType), m_position(pos) {};
 
 //------------------------------------------------------------------------
-void ChessPiece::setPosition(std::pair<int, int> newPos) {
+void ChessPiece::setPosition(const std::pair<int, int>& newPos) {
     m_position = newPos;
 }
 
 //------------------------------------------------------------------------
 std::pair<int, int> ChessPiece::getPosition() const {
-    return position;
+    return m_position;
 }
 
 //------------------------------------------------------------------------

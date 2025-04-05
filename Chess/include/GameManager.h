@@ -1,26 +1,30 @@
 
 #pragma once
+#include <string>
+#include <memory>
 #include "ChessBoard.h"
 #include "GameConstants.h"
-#include <string>
 
 class GameManager {
+
 public:
     GameManager(const std::string& boardStr);
+
+    GameManager(const GameManager&) = delete;
+    GameManager& operator=(const GameManager&) = delete;
 
     // Processes a move in chess notation (e.g., "a7c6") and returns status code
     int checkMovement(const std::string& move);
 
 private:
-    ChessBoard m_chessBoard;
+    std::unique_ptr<ChessBoard> m_chessBoard;
     bool m_isWhiteTurn; // true = White's turn, false = Black's turn
+    
+    // TODO (future): Add vectors to store captured pieces 
+    // for use in UI display, undo functionality, or game history tracking
 
-    // Converts chess notation (e.g., "a7") to board indices (row, col)
+   
     std::pair<int, int> convertPosition(const std::string& pos) const;
-
     void switchTurn();
-    bool isCheck();
+    bool isCheck() const;
 };
-
-
-
