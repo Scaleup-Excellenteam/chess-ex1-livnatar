@@ -46,6 +46,27 @@ int GameManager::checkMovement(const std::string& move) {
     //Step 1: Call ChessBoard to validate the move (does NOT modify board yet)
     int moveStatus = m_chessBoard->checkMovement(from, to, m_isWhiteTurn);
 
+    //Step 2: If move is valid, perform it & check results
+    if (moveStatus == MOVE_SUCCESS) {
+        
+        m_chessBoard->movePiece(from, to);  // Now update board
+
+        // Step 3: Ensure the move does not put the player in check (Code 31)
+        if (isCheck()) {
+            m_chessBoard->movePiece(to, from);  // Undo the move before returning
+            return MOVE_CAUSES_CHECK;           // Code 31
+        }
+
+        // Step 4: Check if this move puts the opponent in check - code 41
+        int finalMoveStatus = checkOpponentInCheck();
+
+        //If everything is valid, switch turn
+        switchTurn();
+
+        return finalMoveStatus;
+    }
+
+    /*
     //Step 2: If move is valid, perform it & switch turn
     if (moveStatus == MOVE_SUCCESS || moveStatus == MOVE_SUCCESS_CHECK) {
         m_chessBoard->movePiece(from, to);  // Now update board
@@ -59,6 +80,7 @@ int GameManager::checkMovement(const std::string& move) {
         //If everything is valid, switch turn
         switchTurn();
     }
+    */
 
     return moveStatus;
 }
@@ -73,7 +95,7 @@ void GameManager::switchTurn() {
 }
 
 //------------------------------------------------------------------------
-//Checks if the current player is in check
+//Checks if the current player is in check - code 31
 
 bool GameManager::isCheck() const{
    
@@ -104,3 +126,21 @@ bool GameManager::isCheck() const{
 */
 }
 
+//------------------------------------------------------------------------
+// Helper method to check if a move puts the opponent in check - code 41
+int GameManager::checkOpponentInCheck() {
+   
+    /*    
+    switchTurn(); // Temporarily switch turn to check from opponent's perspective
+    bool opponentInCheck = isCheck();
+    switchTurn(); // Switch back to current player
+
+    // Return appropriate success code
+    if (opponentInCheck) {
+        return MOVE_SUCCESS_CHECK; // Code 41 - valid move that puts opponent in check
+    }
+    else {
+        return MOVE_SUCCESS;       // Code 42 - valid move
+    }*/
+    return MOVE_SUCCESS;
+}

@@ -27,4 +27,5 @@ private:
     std::pair<int, int> convertPosition(const std::string& pos) const;
     void switchTurn();
     bool isCheck() const;
+    int checkOpponentInCheck();
 };
