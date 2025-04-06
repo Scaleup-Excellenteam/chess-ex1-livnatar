@@ -25,6 +25,7 @@ private:
 
    
     std::pair<int, int> convertPosition(const std::string& pos) const;
+    std::pair<int, int> findKingPosition(bool isWhiteKing) const;
     void switchTurn();
     bool isCheck() const;
     int checkOpponentInCheck();
