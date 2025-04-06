@@ -3,7 +3,8 @@
 #include <stdexcept>
 #include "Rook.h" 
 #include "King.h"
-#include "Bishop.h" // Include other pieces when added
+#include "Bishop.h" 
+#include "Queen.h" // Include other pieces when added
 
 
 //------------------------------------------------------------------------
@@ -104,6 +105,8 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
             case 'k': m_board[i][j] = std::make_unique<King>(false, 'k', pos); break;
             case 'B': m_board[i][j] = std::make_unique<Bishop>(true, 'B', pos); break;
             case 'b': m_board[i][j] = std::make_unique<Bishop>(false, 'b', pos); break;
+            case 'Q': m_board[i][j] = std::make_unique<Queen>(true, 'Q', pos); break;
+            case 'q': m_board[i][j] = std::make_unique<Queen>(false, 'q', pos); break;
             case '#': m_board[i][j] = nullptr; break; // Empty square
                
             default:

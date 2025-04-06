@@ -7,4 +7,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/Rook.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/King.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Bishop.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Queen.cpp"
 )
