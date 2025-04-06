@@ -7,9 +7,7 @@
 // Constructor initializes the chessboard from a string
 
 GameManager::GameManager(const std::string& boardStr) 
-    : m_chessBoard(std::make_unique<ChessBoard>(boardStr)), m_isWhiteTurn(true){
-    m_chessBoard->printBoard();
-}
+    : m_chessBoard(std::make_unique<ChessBoard>(boardStr)), m_isWhiteTurn(true){}
 
 //------------------------------------------------------------------------
 // Converts chess notation (e.g., "a7") to board indices (row, col)
