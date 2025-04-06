@@ -5,4 +5,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/GameManager.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ChessPiece.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Rook.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/King.cpp"
 )

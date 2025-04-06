@@ -1,7 +1,9 @@
 #include "ChessBoard.h"
 #include <iostream>
 #include <stdexcept>
-#include "Rook.h" // Include other pieces when added
+#include "Rook.h" 
+#include "King.h" // Include other pieces when added
+
 
 //------------------------------------------------------------------------
 // Constructor that initializes the board using a string representation
@@ -95,6 +97,8 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
             switch (pieceChar) {
             case 'R': m_board[i][j] = std::make_unique<Rook>(true, 'R', pos); break;
             case 'r': m_board[i][j] = std::make_unique<Rook>(false, 'r', pos); break;
+            case 'K': m_board[i][j] = std::make_unique<King>(true, 'K', pos); break;
+            case 'k': m_board[i][j] = std::make_unique<King>(false, 'k', pos); break;
             case '#': m_board[i][j] = nullptr; break; // Empty square
                 // More pieces will be added later
 
