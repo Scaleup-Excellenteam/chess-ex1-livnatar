@@ -5,7 +5,6 @@
 int main()
 {
 	//string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
-    //string board = "##########K###############################R#############r#r#####";
 	string board = "R#BQKB#R################################################r#bqkb#r";
 	Chess a(board);
 	GameManager gameManager(board);   //create the manger of the game
@@ -29,9 +28,7 @@ int main()
 		*/
 
 		/**/ 
-		{ // put your code here instead that code
-			//cout << "code response >> ";
-			//cin >> codeResponse;
+		{ 
 			codeResponse = gameManager.checkMovement(res);
 		}
 		/**/
