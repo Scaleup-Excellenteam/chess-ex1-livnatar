@@ -14,16 +14,3 @@ const int MOVE_CAUSES_CHECK = 31;  // Move results in a check for the moving pla
 const int MOVE_SUCCESS = 42;  // Valid move: piece moves from source to destination, and turn changes
 const int MOVE_SUCCESS_CHECK = 41;  // Valid move that results in a check: same as MOVE_SUCCESS, but also displays a check message
 
-
-// Additional status codes can be added here later
-
-// Enum for piece types (if needed in the future)
-/*enum class PieceType {
-    NONE,  // Empty square
-    PAWN,
-    KNIGHT,
-    BISHOP,
-    ROOK,
-    QUEEN,
-    KING
-};*/

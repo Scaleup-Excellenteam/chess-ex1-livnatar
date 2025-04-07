@@ -16,18 +16,37 @@ std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
    
     if (pos.size() != 2) return { -1, -1 };
 
-    char loc = tolower(pos[0]); // Convert 'A'-'H' to 'a'-'h'
-    if (loc < 'a' || loc > 'h' || pos[1] < '1' || pos[1] > '8') {
-        return { -1, -1 };
+    if( ( (('A' <= pos[0]) && (pos[0] <= 'H')) || (('a' <= pos[0]) && (pos[0] <= 'h'))) &&
+        (('1' <= pos[1]) && (pos[1] <= '8')) ){
+       
+        // Map 'a' to 0, 'b' to 1, etc.
+        int row = tolower(pos[0]) - 'a';
+
+        // Map '1' to 0, '2' to 1, etc.
+        int col = pos[1] - '1';
+
+        return { row, col };    
     }
 
-    // Map 'a' to 0, 'b' to 1, etc.
-    int col = loc - 'a';
+    return { -1, -1 };
 
-    // Map '1' to 0, '2' to 1, etc.
-    int row = pos[1] - '1';
+    /*
+        if (pos.size() != 2) return { -1, -1 };
 
-    return { col, row };
+        char loc = tolower(pos[0]); // Convert 'A'-'H' to 'a'-'h'
+        if (loc < 'a' || loc > 'h' || pos[1] < '1' || pos[1] > '8') {
+            return { -1, -1 };
+        }
+
+        // Map 'a' to 0, 'b' to 1, etc.
+        int col = loc - 'a';
+
+        // Map '1' to 0, '2' to 1, etc.
+        int row = pos[1] - '1';
+
+        return { col, row };
+     */
+    
 }
 //------------------------------------------------------------------------
 // Processes a move in chess notation and returns a status code
@@ -41,7 +60,7 @@ int GameManager::checkMovement(const std::string& move) {
     std::pair<int, int> from = convertPosition(move.substr(0, 2));
     std::pair<int, int> to = convertPosition(move.substr(2, 2));
 
-    //Step 1: Call ChessBoard to validate the move (does NOT modify board yet)
+    //Step 1: Call ChessBoard to validate the move
     int moveStatus = m_chessBoard->checkMovement(from, to, m_isWhiteTurn);
 
     //Step 2: If move is valid, perform it & check results
@@ -49,10 +68,10 @@ int GameManager::checkMovement(const std::string& move) {
         
         m_chessBoard->movePiece(from, to);  // Now update board
 
-        // Step 3: Ensure the move does not put the player in check (Code 31)
+        // Step 3: Ensure the move does not put the player in check - code 31
         if (isCheck()) {
             m_chessBoard->movePiece(to, from);  // Undo the move before returning
-            return MOVE_CAUSES_CHECK;           // Code 31
+            return MOVE_CAUSES_CHECK;           
         }
 
         // Step 4: Check if this move puts the opponent in check - code 41
@@ -102,12 +121,12 @@ bool GameManager::isCheck() const{
 
             // Check if this opponent piece can move to the king's position
             if ( (piece->checkMovement(*m_chessBoard, kingPos)) == MOVE_SUCCESS) {
-                return true;  // King is under attack
+                return true;  
             }
         }
     }
 
-    return false;  // No threat to the king
+    return false;  
 }
 
 //------------------------------------------------------------------------

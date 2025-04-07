@@ -31,8 +31,3 @@ private:
     std::vector<std::vector<std::unique_ptr<ChessPiece>>> m_board;
     void setupBoard(const std::string& boardStr);
 };
-/*
-* The constractor that we added tells the compiler that ChessBoard cannot be copied
-* (which makes sense since it contains unique_ptrs), but it can be moved, which is what
-* should happen when constructing the GameManager.
-*/
