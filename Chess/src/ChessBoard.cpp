@@ -1,10 +1,12 @@
 #include "ChessBoard.h"
 #include <iostream>
 #include <stdexcept>
-#include "Rook.h" 
-#include "King.h"
-#include "Bishop.h" 
-#include "Queen.h" // Include other pieces when added
+#include "PieceFactory.h"
+
+//#include "Rook.h" 
+//#include "King.h"
+//#include "Bishop.h" 
+//#include "Queen.h" // Include other pieces when added
 
 
 //------------------------------------------------------------------------
@@ -12,6 +14,9 @@
 
 ChessBoard::ChessBoard(const std::string& boardStr) {
     
+    // Initialize the factory
+    PieceFactory::initialize();
+
     // Resize the outer vector (rows)
     m_board.resize(8);
 
@@ -85,7 +90,10 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
             
             char pieceChar = boardStr[i * 8 + j];
             std::pair<int, int> pos = { i, j };
+
+            m_board[i][j] = PieceFactory::createPiece(pieceChar, pos);
             
+            /*
             switch (pieceChar) {
 
             // More pieces will be added later
@@ -103,7 +111,7 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
                 std::cout << "Warning: Unknown piece character '" << pieceChar
                     << "' at position (" << i << ", " << j << ")." << std::endl; 
                 break;
-            }
+            }*/
         }
     }
 }
