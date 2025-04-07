@@ -16,18 +16,37 @@ std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
    
     if (pos.size() != 2) return { -1, -1 };
 
-    char loc = tolower(pos[0]); // Convert 'A'-'H' to 'a'-'h'
-    if (loc < 'a' || loc > 'h' || pos[1] < '1' || pos[1] > '8') {
-        return { -1, -1 };
+    if( ( (('A' <= pos[0]) && (pos[0] <= 'H')) || (('a' <= pos[0]) && (pos[0] <= 'h'))) &&
+        (('1' <= pos[1]) && (pos[1] <= '8')) ){
+       
+        // Map 'a' to 0, 'b' to 1, etc.
+        int row = tolower(pos[0]) - 'a';
+
+        // Map '1' to 0, '2' to 1, etc.
+        int col = pos[1] - '1';
+
+        return { row, col };    
     }
 
-    // Map 'a' to 0, 'b' to 1, etc.
-    int col = loc - 'a';
+    return { -1, -1 };
 
-    // Map '1' to 0, '2' to 1, etc.
-    int row = pos[1] - '1';
+    /*
+        if (pos.size() != 2) return { -1, -1 };
 
-    return { col, row };
+        char loc = tolower(pos[0]); // Convert 'A'-'H' to 'a'-'h'
+        if (loc < 'a' || loc > 'h' || pos[1] < '1' || pos[1] > '8') {
+            return { -1, -1 };
+        }
+
+        // Map 'a' to 0, 'b' to 1, etc.
+        int col = loc - 'a';
+
+        // Map '1' to 0, '2' to 1, etc.
+        int row = pos[1] - '1';
+
+        return { col, row };
+     */
+    
 }
 //------------------------------------------------------------------------
 // Processes a move in chess notation and returns a status code

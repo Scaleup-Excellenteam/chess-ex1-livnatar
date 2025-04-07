@@ -10,16 +10,6 @@
 //------------------------------------------------------------------------
 // Constructor that initializes the board using a string representation
 
-/*ChessBoard::ChessBoard(const std::string& boardStr)
-    : m_board(8, std::vector<std::unique_ptr<ChessPiece>>(8))
-{
-    if (boardStr.size() != 64) {
-        // throw std::invalid_argument("Board string must be exactly 64 characters long.");
-        std::cout << "Board string must be exactly 64 characters long." << std::endl;
-    }
-    setupBoard(boardStr);
-}*/
-
 ChessBoard::ChessBoard(const std::string& boardStr) {
     
     // Resize the outer vector (rows)
