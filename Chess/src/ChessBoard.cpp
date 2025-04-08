@@ -50,9 +50,10 @@ const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
 
 int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const {
 
-    //If conversion failed, treat as "no piece at source" (Code 11)
+    //If conversion failed - treat as "no piece at source" - not need to happen cause we check in Chess class
     if (from.first == -1 || to.first == -1) {
-        return MOVE_NO_PIECE_IN_SOURCE;  //Invalid source position -> Code 11
+
+        return MOVE_NO_PIECE_IN_SOURCE;  // Code 11
     }
 
     //Step 1: Check if source square has a piece
@@ -74,8 +75,6 @@ int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<i
 
     //Step 4: Call ChessPiece to validate the move   
     int moveStatus = sourcePiece->checkMovement(*this, to);
-
-
 
     return moveStatus;
 }
