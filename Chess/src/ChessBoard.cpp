@@ -1,10 +1,12 @@
 #include "ChessBoard.h"
 #include <iostream>
 #include <stdexcept>
-#include "Rook.h" 
-#include "King.h"
-#include "Bishop.h" 
-#include "Queen.h" // Include other pieces when added
+#include "PieceFactory.h"
+
+//#include "Rook.h" 
+//#include "King.h"
+//#include "Bishop.h" 
+//#include "Queen.h" // Include other pieces when added
 
 
 //------------------------------------------------------------------------
@@ -12,6 +14,9 @@
 
 ChessBoard::ChessBoard(const std::string& boardStr) {
     
+    // Initialize the factory
+    PieceFactory::initialize();
+
     // Resize the outer vector (rows)
     m_board.resize(8);
 
@@ -45,9 +50,10 @@ const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
 
 int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const {
 
-    //If conversion failed, treat as "no piece at source" (Code 11)
+    //If conversion failed - treat as "no piece at source" - not need to happen cause we check in Chess class
     if (from.first == -1 || to.first == -1) {
-        return MOVE_NO_PIECE_IN_SOURCE;  //Invalid source position -> Code 11
+
+        return MOVE_NO_PIECE_IN_SOURCE;  // Code 11
     }
 
     //Step 1: Check if source square has a piece
@@ -70,8 +76,6 @@ int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<i
     //Step 4: Call ChessPiece to validate the move   
     int moveStatus = sourcePiece->checkMovement(*this, to);
 
-
-
     return moveStatus;
 }
 //------------------------------------------------------------------------
@@ -85,7 +89,10 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
             
             char pieceChar = boardStr[i * 8 + j];
             std::pair<int, int> pos = { i, j };
+
+            m_board[i][j] = PieceFactory::createPiece(pieceChar, pos);
             
+            /*
             switch (pieceChar) {
 
             // More pieces will be added later
@@ -103,7 +110,7 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
                 std::cout << "Warning: Unknown piece character '" << pieceChar
                     << "' at position (" << i << ", " << j << ")." << std::endl; 
                 break;
-            }
+            }*/
         }
     }
 }
