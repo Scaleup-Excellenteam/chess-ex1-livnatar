@@ -11,6 +11,7 @@ public:
     // Delete copy constructor and assignment
     Knight(const Knight&) = delete;
     Knight& operator=(const Knight&) = delete;
+   
     // Add move constructor and assignment
     Knight(Knight&&) noexcept = default;
     Knight& operator=(Knight&&) noexcept = default;

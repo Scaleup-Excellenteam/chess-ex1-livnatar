@@ -11,6 +11,7 @@ public:
     // Delete copy constructor and assignment
     King(const King&) = delete;
     King& operator=(const King&) = delete;
+   
     // Add move constructor and assignment
     King(King&&) noexcept = default;
     King& operator=(King&&) noexcept = default;

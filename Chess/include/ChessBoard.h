@@ -14,6 +14,7 @@ public:
     // Delete copy constructor and assignment
     ChessBoard(const ChessBoard&) = delete;
     ChessBoard& operator=(const ChessBoard&) = delete;
+    
     // Add move constructor and assignment
     ChessBoard(ChessBoard&& other) noexcept = default;
     ChessBoard& operator=(ChessBoard&& other) noexcept = default;
