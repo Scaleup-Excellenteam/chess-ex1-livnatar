@@ -15,18 +15,24 @@ public:
 
     // Processes a move in chess notation (e.g., "a7c6") and returns status code
     int checkMovement(const std::string& move);
+   
+    // Accessor methods for future (UI display...)
+    //const std::vector<std::unique_ptr<ChessPiece>>& getCapturedWhitePieces() const;
+    //const std::vector<std::unique_ptr<ChessPiece>>& getCapturedBlackPieces() const;
 
 private:
     std::unique_ptr<ChessBoard> m_chessBoard;
-    bool m_isWhiteTurn; // true = White's turn, false = Black's turn
+    bool m_isWhiteTurn;
     
-    // TODO (future): Add vectors to store captured pieces 
-    // for use in UI display, undo functionality, or game history tracking
-
+    std::vector<std::unique_ptr<ChessPiece>> m_capturedWhitePieces;
+    std::vector<std::unique_ptr<ChessPiece>> m_capturedBlackPieces;
+    std::unique_ptr<ChessPiece> m_lastCaptured;
    
     std::pair<int, int> convertPosition(const std::string& pos) const;
     std::pair<int, int> findKingPosition(bool isWhiteKing) const;
     void switchTurn();
     bool isCheck() const;
     int checkOpponentInCheck();
+    void makeMove(const std::pair<int, int>& from, const std::pair<int, int>& to);
+    void undoLastMove(const std::pair<int, int>& from, const std::pair<int, int>& to);
 };
