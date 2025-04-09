@@ -5,6 +5,17 @@
 #include "ChessBoard.h"
 #include "GameConstants.h"
 
+
+/*
+Input Handling Note:
+The Chess class provided handles user input and can't be modified.
+However, it doesn't catch all invalid inputs (e.g., wrong format or out-of-bounds).
+Since I can't add new response codes, I chose to return code 11 ("no piece at source")
+as a fallback for any unexpected or malformed input. This keeps the game running
+smoothly within the project’s limits.
+*/
+
+
 class GameManager {
 
 public:
