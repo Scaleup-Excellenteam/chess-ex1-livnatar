@@ -11,6 +11,7 @@ public:
     // Delete copy constructor and assignment
     Queen(const Queen&) = delete;
     Queen& operator=(const Queen&) = delete;
+    
     // Add move constructor and assignment
     Queen(Queen&&) noexcept = default;
     Queen& operator=(Queen&&) noexcept = default;

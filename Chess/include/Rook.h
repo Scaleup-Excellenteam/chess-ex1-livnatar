@@ -11,6 +11,7 @@ public:
     // Delete copy constructor and assignment
     Rook(const Rook&) = delete;
     Rook& operator=(const Rook&) = delete;
+    
     // Add move constructor and assignment
     Rook(Rook&&) noexcept = default;
     Rook& operator=(Rook&&) noexcept = default;

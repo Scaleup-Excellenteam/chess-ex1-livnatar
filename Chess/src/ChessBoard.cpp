@@ -91,26 +91,6 @@ void ChessBoard::setupBoard(const std::string& boardStr) {
             std::pair<int, int> pos = { i, j };
 
             m_board[i][j] = PieceFactory::createPiece(pieceChar, pos);
-            
-            /*
-            switch (pieceChar) {
-
-            // More pieces will be added later
-            case 'R': m_board[i][j] = std::make_unique<Rook>(true, 'R', pos); break;
-            case 'r': m_board[i][j] = std::make_unique<Rook>(false, 'r', pos); break;
-            case 'K': m_board[i][j] = std::make_unique<King>(true, 'K', pos); break;
-            case 'k': m_board[i][j] = std::make_unique<King>(false, 'k', pos); break;
-            case 'B': m_board[i][j] = std::make_unique<Bishop>(true, 'B', pos); break;
-            case 'b': m_board[i][j] = std::make_unique<Bishop>(false, 'b', pos); break;
-            case 'Q': m_board[i][j] = std::make_unique<Queen>(true, 'Q', pos); break;
-            case 'q': m_board[i][j] = std::make_unique<Queen>(false, 'q', pos); break;
-            case '#': m_board[i][j] = nullptr; break; // Empty square
-               
-            default:
-                std::cout << "Warning: Unknown piece character '" << pieceChar
-                    << "' at position (" << i << ", " << j << ")." << std::endl; 
-                break;
-            }*/
         }
     }
 }
@@ -120,6 +100,12 @@ void ChessBoard::movePiece(const std::pair<int, int>& from, const std::pair<int,
     m_board[to.first][to.second] = std::move(m_board[from.first][from.second]);
     m_board[to.first][to.second]->setPosition(to);
     m_board[from.first][from.second] = nullptr; // Clear the source square
+}
+//------------------------------------------------------------------------
+
+void ChessBoard::setupPieceAt(char pieceChar, const std::pair<int, int>& pos) {
+    
+    m_board[pos.first][pos.second] = PieceFactory::createPiece(pieceChar, pos);
 }
 //------------------------------------------------------------------------
 // Prints the board for debugging purposes

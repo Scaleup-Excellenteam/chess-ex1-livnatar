@@ -14,6 +14,7 @@ public:
     // Delete copy constructor and assignment
     ChessBoard(const ChessBoard&) = delete;
     ChessBoard& operator=(const ChessBoard&) = delete;
+    
     // Add move constructor and assignment
     ChessBoard(ChessBoard&& other) noexcept = default;
     ChessBoard& operator=(ChessBoard&& other) noexcept = default;
@@ -25,6 +26,7 @@ public:
     const ChessPiece* getPieceAt(int row, int col) const;
     int checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const;
     void movePiece(const std::pair<int, int>& from, const std::pair<int, int>& to);
+    void setupPieceAt(char pieceChar, const std::pair<int, int>& pos);
     void printBoard() const;
 
 private:

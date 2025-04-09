@@ -13,6 +13,7 @@ public:
     // Delete copy constructor and assignment
     ChessPiece(const ChessPiece&) = delete;
     ChessPiece& operator=(const ChessPiece&) = delete;
+    
     // Add move constructor and assignment
     ChessPiece(ChessPiece&&) noexcept = default;
     ChessPiece& operator=(ChessPiece&&) noexcept = default;
