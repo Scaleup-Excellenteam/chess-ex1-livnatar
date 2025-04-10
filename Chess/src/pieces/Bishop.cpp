@@ -1,12 +1,13 @@
 
 #include "pieces/Bishop.h"
-#include "board/ChessBoard.h"
-#include "GameConstants.h"
+//#include "board/ChessBoard.h"
+//#include "GameConstants.h"
 
 //------------------------------------------------------------------------
 Bishop::Bishop(bool isWhite, char pieceType, const std::pair<int, int>& pos)
     : ChessPiece(isWhite, pieceType, pos) {}
 
+/*
 //------------------------------------------------------------------------
 
 int Bishop::checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const {
@@ -44,3 +45,4 @@ int Bishop::checkMovement(const ChessBoard& board, const std::pair<int, int>& ne
     // Path is clear - valid move
     return MOVE_SUCCESS;
 }
+*/

@@ -1,13 +1,14 @@
 
 
 #include "pieces/Queen.h"
-#include "board/ChessBoard.h"
-#include "GameConstants.h"
+//#include "board/ChessBoard.h"
+//#include "GameConstants.h"
 
 //------------------------------------------------------------------------
 Queen::Queen(bool isWhite, char pieceType, const std::pair<int, int>& pos)
     : ChessPiece(isWhite, pieceType, pos) {}
 
+/*
 //------------------------------------------------------------------------
 int Queen::checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const {
    
@@ -91,3 +92,4 @@ bool Queen::isPathClearDiagonal(const ChessBoard& board, int startRow, int start
     }
     return true;
 }
+*/

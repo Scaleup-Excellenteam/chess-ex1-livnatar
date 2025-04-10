@@ -1,13 +1,14 @@
 
 
 #include "pieces/King.h"
-#include "board/ChessBoard.h"
-#include "GameConstants.h"
+//#include "board/ChessBoard.h"
+//#include "GameConstants.h"
 
 //------------------------------------------------------------------------
 King::King(bool isWhite, char pieceType, const std::pair<int, int>& pos)
     : ChessPiece(isWhite, pieceType, pos) {}
 
+/*
 //------------------------------------------------------------------------
 
 int King::checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const {
@@ -38,3 +39,4 @@ int King::checkMovement(const ChessBoard& board, const std::pair<int, int>& newP
 
     return MOVE_SUCCESS;
 }
+*/

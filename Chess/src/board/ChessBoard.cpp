@@ -3,12 +3,6 @@
 #include <stdexcept>
 #include "factories/PieceFactory.h"
 
-//#include "Rook.h" 
-//#include "King.h"
-//#include "Bishop.h" 
-//#include "Queen.h" // Include other pieces when added
-
-
 //------------------------------------------------------------------------
 // Constructor that initializes the board using a string representation
 

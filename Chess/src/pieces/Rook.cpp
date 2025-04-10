@@ -1,12 +1,13 @@
 
 #include "pieces/Rook.h"
-#include "board/ChessBoard.h"
-#include "GameConstants.h"
+//#include "board/ChessBoard.h"
+//#include "GameConstants.h"
 
 //------------------------------------------------------------------------
 Rook::Rook(bool isWhite, char pieceType, const std::pair<int, int>& pos)
     : ChessPiece(isWhite, pieceType, pos) {}
 
+/*
 //------------------------------------------------------------------------
 
 int Rook::checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const {
@@ -50,3 +51,4 @@ int Rook::checkMovement(const ChessBoard& board, const std::pair<int, int>& newP
     // Path is clear - movement is valid
     return MOVE_SUCCESS;
 }
+*/

@@ -16,5 +16,5 @@ public:
     Bishop(Bishop&&) noexcept = default;
     Bishop& operator=(Bishop&&) noexcept = default;
 
-    int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const override;
+    //int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const override;
 };

@@ -1,5 +1,6 @@
 
 #include "factories/PieceFactory.h"
+#include "factories/MoveStrategyFactory.h"
 #include <iostream>
 #include "pieces/Rook.h" 
 #include "pieces/King.h"
@@ -13,6 +14,9 @@
 std::map<char, PieceFactory::PieceCreator> PieceFactory::m_pieceCreators;
 
 void PieceFactory::initialize() {
+
+    // Initialize the move strategy factory 
+    MoveStrategyFactory::initialize();
    
     // Register piece creators
     m_pieceCreators['R'] = [](bool isWhite, char symbol, const std::pair<int, int>& pos) {
