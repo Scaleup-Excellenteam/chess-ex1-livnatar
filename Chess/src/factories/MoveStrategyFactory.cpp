@@ -5,6 +5,7 @@
 #include "strategies/RookMoveStrategy.h"
 #include "strategies/BishopMoveStrategy.h"
 #include "strategies/KnightMoveStrategy.h"
+#include "strategies/KingMoveStrategy.h"
 
 //------------------------------------------------------------------------
 // Initialize the static map
@@ -22,6 +23,9 @@ void MoveStrategyFactory::initialize() {
 
     m_strategies['N'] = std::make_shared<KnightMoveStrategy>();
     m_strategies['n'] = m_strategies['N'];
+
+    m_strategies['K'] = std::make_shared<KingMoveStrategy>();
+    m_strategies['k'] = m_strategies['K'];
 
 }
 //------------------------------------------------------------------------

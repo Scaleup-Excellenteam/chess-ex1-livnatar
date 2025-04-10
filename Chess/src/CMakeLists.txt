@@ -14,4 +14,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/RookMoveStrategy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/BishopMoveStrategy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/KnightMoveStrategy.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/strategies/KingMoveStrategy.cpp"
 )
