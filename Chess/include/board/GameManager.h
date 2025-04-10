@@ -2,7 +2,7 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "ChessBoard.h"
+#include "board/ChessBoard.h"
 #include "GameConstants.h"
 
 

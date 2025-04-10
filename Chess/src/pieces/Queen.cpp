@@ -1,7 +1,7 @@
 
 
-#include "Queen.h"
-#include "ChessBoard.h"
+#include "pieces/Queen.h"
+#include "board/ChessBoard.h"
 #include "GameConstants.h"
 
 //------------------------------------------------------------------------

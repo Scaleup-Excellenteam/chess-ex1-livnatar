@@ -1,7 +1,7 @@
-#include "ChessBoard.h"
+#include "board/ChessBoard.h"
 #include <iostream>
 #include <stdexcept>
-#include "PieceFactory.h"
+#include "factories/PieceFactory.h"
 
 //#include "Rook.h" 
 //#include "King.h"

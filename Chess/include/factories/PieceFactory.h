@@ -3,7 +3,7 @@
 #include <memory>
 #include <map>
 #include <functional>
-#include "ChessPiece.h"
+#include "pieces/ChessPiece.h"
 
 class PieceFactory {
 

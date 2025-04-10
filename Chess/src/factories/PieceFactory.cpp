@@ -1,11 +1,11 @@
 
-#include "PieceFactory.h"
+#include "factories/PieceFactory.h"
 #include <iostream>
-#include "Rook.h" 
-#include "King.h"
-#include "Bishop.h" 
-#include "Queen.h" 
-#include "Knight.h" // Include other pieces when added
+#include "pieces/Rook.h" 
+#include "pieces/King.h"
+#include "pieces/Bishop.h" 
+#include "pieces/Queen.h" 
+#include "pieces/Knight.h" // Include other pieces when added
 
 
 //------------------------------------------------------------------------

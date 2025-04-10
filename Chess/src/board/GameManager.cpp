@@ -1,8 +1,8 @@
 
-#include "GameManager.h"
+#include "board/GameManager.h"
 #include <iostream>
 #include <stdexcept>
-#include "PieceFactory.h"
+#include "factories/PieceFactory.h"
 
 //------------------------------------------------------------------------
 // Constructor initializes the chessboard from a string

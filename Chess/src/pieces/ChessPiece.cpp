@@ -1,5 +1,5 @@
 
-#include "ChessPiece.h"
+#include "pieces/ChessPiece.h"
 
 //------------------------------------------------------------------------
 ChessPiece::ChessPiece(bool isWhite, char pieceType, const std::pair<int, int>& pos)

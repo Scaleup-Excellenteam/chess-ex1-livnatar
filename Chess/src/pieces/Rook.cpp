@@ -1,6 +1,6 @@
 
-#include "Rook.h"
-#include "ChessBoard.h"
+#include "pieces/Rook.h"
+#include "board/ChessBoard.h"
 #include "GameConstants.h"
 
 //------------------------------------------------------------------------
