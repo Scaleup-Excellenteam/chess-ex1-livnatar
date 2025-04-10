@@ -5,8 +5,10 @@
 #include "factories/PieceFactory.h"
 
 //------------------------------------------------------------------------
-// Constructor initializes the chessboard from a string
-
+/**
+ * Constructs a GameManager and initializes the board with a given state.
+ * @param boardStr String representing the initial board layout.
+ */
 GameManager::GameManager(const std::string& boardStr) 
     : m_chessBoard(std::make_unique<ChessBoard>(boardStr)),
     m_isWhiteTurn(true),
@@ -15,8 +17,11 @@ GameManager::GameManager(const std::string& boardStr)
     m_lastCaptured(nullptr) {}
 
 //------------------------------------------------------------------------
-// Converts chess notation (e.g., "a7") to board indices (row, col)
-
+/**
+ * Converts a position from chess notation (e.g., "e2") to board coordinates.
+ * @param pos The position in chess notation.
+ * @return A pair of integers representing (row, column) or (-1, -1) if invalid.
+ */
 std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
    
     if (pos.size() != 2) return { -1, -1 };
@@ -36,8 +41,12 @@ std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
     return { -1, -1 };  // no need to get here - Chess class check for invalid input
 }
 //------------------------------------------------------------------------
-// Processes a move in chess notation and returns a status code
-
+/**
+ * Validates and processes a move.
+ * If the move is legal and doesn't result in self-check, it is executed.
+ * @param move The move string in standard format (e.g., "e2e4").
+ * @return Status code indicating the move result.
+ */
 int GameManager::checkMovement(const std::string& move) {
     
     // if invalid format - treat as "no piece at source" - not need to happen cause we check in Chess class
@@ -76,16 +85,19 @@ int GameManager::checkMovement(const std::string& move) {
 
 
 //------------------------------------------------------------------------
-//Switches the turn between white and black 
-
+/**
+ * Switches the active player from white to black or vice versa.
+ */
 void GameManager::switchTurn() {
 
     m_isWhiteTurn = !m_isWhiteTurn;
 }
 
 //------------------------------------------------------------------------
-//Checks if the current player is in check - code 31
-
+/**
+ * Checks if the current player's king is under attack.
+ * @return True if the current player is in check, false otherwise.
+ */
 bool GameManager::isCheck() const{
    
     // Find the king of the current player
@@ -118,8 +130,11 @@ bool GameManager::isCheck() const{
 }
 
 //------------------------------------------------------------------------
-// Helper method to find the king's position
-
+/**
+ * Finds the current position of the specified color's king.
+ * @param isWhiteKing True if searching for the white king, false for black.
+ * @return A pair of integers representing the king's position or (-1, -1) if not found.
+ */
 std::pair<int, int> GameManager::findKingPosition(bool isWhiteKing) const {
     
     for (int row = 0; row < 8; ++row) {
@@ -142,8 +157,10 @@ std::pair<int, int> GameManager::findKingPosition(bool isWhiteKing) const {
 }
 
 //------------------------------------------------------------------------
-// Helper method to check if a move puts the opponent in check - code 41
-
+/**
+ * Checks if the opponent is in check after the current move.
+ * @return MOVE_SUCCESS_CHECK if opponent is in check, MOVE_SUCCESS otherwise.
+ */
 int GameManager::checkOpponentInCheck() {
    
     // Temporarily switch turn to check if opponent in check
@@ -164,7 +181,11 @@ int GameManager::checkOpponentInCheck() {
 }
 
 //------------------------------------------------------------------------
-
+/**
+ * Executes a valid move, updates the board, and handles any captured piece.
+ * @param from The source coordinates of the moving piece.
+ * @param to The destination coordinates of the moving piece.
+ */
 void GameManager::makeMove(const std::pair<int, int>& from, const std::pair<int, int>& to) {
    
     // Save piece that might be captured
@@ -199,7 +220,11 @@ void GameManager::makeMove(const std::pair<int, int>& from, const std::pair<int,
     m_chessBoard->movePiece(from, to);
 }
 //------------------------------------------------------------------------
-
+/**
+ * Reverts the last move, restoring both piece position and any captured piece.
+ * @param from The original source of the move.
+ * @param to The destination the piece moved to before being undone.
+ */
 void GameManager::undoLastMove(const std::pair<int, int>& from, const std::pair<int, int>& to) {
     
     // Move the piece back to its original position on the board
