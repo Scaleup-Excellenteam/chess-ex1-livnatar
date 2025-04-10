@@ -6,6 +6,7 @@
 #include "strategies/BishopMoveStrategy.h"
 #include "strategies/KnightMoveStrategy.h"
 #include "strategies/KingMoveStrategy.h"
+#include "strategies/QueenMoveStrategy.h"
 
 //------------------------------------------------------------------------
 // Initialize the static map
@@ -14,19 +15,29 @@ std::map<char, std::shared_ptr<MoveStrategy>> MoveStrategyFactory::m_strategies;
 //------------------------------------------------------------------------
 
 void MoveStrategyFactory::initialize() {
-    
-    m_strategies['R'] = std::make_shared<RookMoveStrategy>();
-    m_strategies['r'] = m_strategies['R']; // Same strategy for lowercase
+  
+    // Create strategies
+    auto rookStrategy = std::make_shared<RookMoveStrategy>();
+    auto bishopStrategy = std::make_shared<BishopMoveStrategy>();
+    auto knightStrategy = std::make_shared<KnightMoveStrategy>();
+    auto kingStrategy = std::make_shared<KingMoveStrategy>();
+    auto queenStrategy = std::make_shared<QueenMoveStrategy>(rookStrategy, bishopStrategy);
 
-    m_strategies['B'] = std::make_shared<BishopMoveStrategy>();
-    m_strategies['b'] = m_strategies['B'];
+    // Register all piece strategies
+    m_strategies['R'] = rookStrategy;
+    m_strategies['r'] = rookStrategy;
 
-    m_strategies['N'] = std::make_shared<KnightMoveStrategy>();
-    m_strategies['n'] = m_strategies['N'];
+    m_strategies['B'] = bishopStrategy;
+    m_strategies['b'] = bishopStrategy;
 
-    m_strategies['K'] = std::make_shared<KingMoveStrategy>();
-    m_strategies['k'] = m_strategies['K'];
+    m_strategies['N'] = knightStrategy;
+    m_strategies['n'] = knightStrategy;
 
+    m_strategies['Q'] = queenStrategy;
+    m_strategies['q'] = queenStrategy;
+
+    m_strategies['K'] = kingStrategy;
+    m_strategies['k'] = kingStrategy;
 }
 //------------------------------------------------------------------------
 
