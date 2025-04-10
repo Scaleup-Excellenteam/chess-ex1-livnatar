@@ -2,6 +2,7 @@
 
 #include "factories/MoveStrategyFactory.h"
 #include <cctype>
+#include "strategies/RookMoveStrategy.h"
 
 //------------------------------------------------------------------------
 // Initialize the static map
@@ -11,7 +12,8 @@ std::map<char, std::shared_ptr<MoveStrategy>> MoveStrategyFactory::m_strategies;
 
 void MoveStrategyFactory::initialize() {
     
-    // This is just the skeleton implementation
+    m_strategies['R'] = std::make_shared<RookMoveStrategy>();
+    m_strategies['r'] = m_strategies['R']; // Same strategy for lowercase
 }
 //------------------------------------------------------------------------
 
