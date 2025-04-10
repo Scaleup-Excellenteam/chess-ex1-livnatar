@@ -1,5 +1,6 @@
 
 #include "factories/PieceFactory.h"
+#include "factories/MoveStrategyFactory.h"
 #include <iostream>
 #include "pieces/Rook.h" 
 #include "pieces/King.h"
@@ -9,10 +10,22 @@
 
 
 //------------------------------------------------------------------------
-
+/**
+ * Static map that holds piece creation lambdas.
+ * Key: Character representing the piece.
+ * Value: Lambda that returns a unique_ptr to the corresponding piece.
+ */
 std::map<char, PieceFactory::PieceCreator> PieceFactory::m_pieceCreators;
 
+//------------------------------------------------------------------------
+/**
+ * Initializes the factory by registering all piece creators.
+ * Also ensures the move strategies are initialized first.
+ */
 void PieceFactory::initialize() {
+
+    // Initialize the move strategy factory 
+    MoveStrategyFactory::initialize();
    
     // Register piece creators
     m_pieceCreators['R'] = [](bool isWhite, char symbol, const std::pair<int, int>& pos) {
@@ -59,7 +72,12 @@ void PieceFactory::initialize() {
 }
 
 //------------------------------------------------------------------------
-
+/**
+ * Creates a piece based on its character representation.
+ * @param pieceChar Character representing the piece type ('R', 'k', etc.)
+ * @param pos Position on the board where the piece will be placed.
+ * @return A unique_ptr to the created ChessPiece or nullptr if empty or unknown.
+ */
 std::unique_ptr<ChessPiece> PieceFactory::createPiece(char pieceChar, const std::pair<int, int>& pos) {
     
     

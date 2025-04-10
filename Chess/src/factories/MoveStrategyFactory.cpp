@@ -9,11 +9,18 @@
 #include "strategies/QueenMoveStrategy.h"
 
 //------------------------------------------------------------------------
-// Initialize the static map
+/**
+ * Static map that holds the move strategies for each piece type.
+ * Key: Piece character ('R', 'b', etc.)
+ * Value: Corresponding shared MoveStrategy instance.
+ */
 std::map<char, std::shared_ptr<MoveStrategy>> MoveStrategyFactory::m_strategies;
 
 //------------------------------------------------------------------------
-
+/**
+ * Initializes the move strategies for each piece type and registers them
+ * in the strategy map.
+ */
 void MoveStrategyFactory::initialize() {
   
     // Create strategies
@@ -40,7 +47,11 @@ void MoveStrategyFactory::initialize() {
     m_strategies['k'] = kingStrategy;
 }
 //------------------------------------------------------------------------
-
+/**
+ * Retrieves the move strategy for the given piece character.
+ * @param pieceType Character representing the piece type.
+ * @return Shared pointer to the corresponding MoveStrategy, or nullptr if not found.
+ */
 std::shared_ptr<MoveStrategy> MoveStrategyFactory::createMoveStrategy(char pieceType) {
     
     auto it = m_strategies.find(pieceType);

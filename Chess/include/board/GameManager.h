@@ -24,7 +24,6 @@ public:
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
 
-    // Processes a move in chess notation (e.g., "a7c6") and returns status code
     int checkMovement(const std::string& move);
    
     // Accessor methods for future (UI display...)

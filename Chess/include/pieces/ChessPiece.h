@@ -1,8 +1,10 @@
 
 #pragma once
-#include <utility> // For std::pair
+#include <utility> 
+#include <memory>
 
 class ChessBoard;
+class MoveStrategy;
 
 class ChessPiece {
 public:
@@ -18,7 +20,7 @@ public:
     ChessPiece(ChessPiece&&) noexcept = default;
     ChessPiece& operator=(ChessPiece&&) noexcept = default;
     
-    virtual int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const = 0;
+    int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const;
     std::pair<int, int> getPosition() const;
     char getPieceType() const;
     bool getColor() const;
@@ -28,4 +30,5 @@ protected:
     bool m_isWhite;
     char m_pieceType;
     std::pair<int, int> m_position;
+    std::shared_ptr<MoveStrategy> m_moveStrategy;
 };

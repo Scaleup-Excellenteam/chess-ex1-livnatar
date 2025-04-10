@@ -3,6 +3,14 @@
 #include "board/ChessBoard.h"
 
 //------------------------------------------------------------------------
+/**
+ * Validates a king's move (1 square in any direction).
+ *
+ * @param board The current chess board.
+ * @param from  Starting position.
+ * @param to    Target position.
+ * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
+ */
 int KingMoveStrategy::checkMovement(const ChessBoard& board,
                                     const std::pair<int, int>& from,
                                     const std::pair<int, int>& to) const {

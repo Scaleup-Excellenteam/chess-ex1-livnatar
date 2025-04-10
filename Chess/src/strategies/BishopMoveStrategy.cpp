@@ -3,6 +3,14 @@
 #include "board/ChessBoard.h"
 
 //------------------------------------------------------------------------
+/**
+ * Checks if a bishop move is valid (diagonal and not blocked).
+ *
+ * @param board The current chess board.
+ * @param from  Source position.
+ * @param to    Destination position.
+ * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
+ */
 int BishopMoveStrategy::checkMovement(const ChessBoard& board,
                                       const std::pair<int, int>& from,
                                       const std::pair<int, int>& to) const {

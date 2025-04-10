@@ -15,6 +15,4 @@ public:
     // Add move constructor and assignment
     Rook(Rook&&) noexcept = default;
     Rook& operator=(Rook&&) noexcept = default;
-   
-    int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const override;
 };
