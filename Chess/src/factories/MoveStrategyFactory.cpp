@@ -3,6 +3,7 @@
 #include "factories/MoveStrategyFactory.h"
 #include <cctype>
 #include "strategies/RookMoveStrategy.h"
+#include "strategies/BishopMoveStrategy.h"
 
 //------------------------------------------------------------------------
 // Initialize the static map
@@ -14,6 +15,10 @@ void MoveStrategyFactory::initialize() {
     
     m_strategies['R'] = std::make_shared<RookMoveStrategy>();
     m_strategies['r'] = m_strategies['R']; // Same strategy for lowercase
+
+    m_strategies['B'] = std::make_shared<BishopMoveStrategy>();
+    m_strategies['b'] = m_strategies['B'];
+
 }
 //------------------------------------------------------------------------
 

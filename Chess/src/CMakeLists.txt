@@ -12,4 +12,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/factories/PieceFactory.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/factories/MoveStrategyFactory.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/RookMoveStrategy.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/strategies/BishopMoveStrategy.cpp"
 )
