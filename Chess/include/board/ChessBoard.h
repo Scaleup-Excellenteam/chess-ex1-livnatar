@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "ChessPiece.h"
+#include "pieces/ChessPiece.h"
 #include "GameConstants.h" 
 
 class ChessBoard {

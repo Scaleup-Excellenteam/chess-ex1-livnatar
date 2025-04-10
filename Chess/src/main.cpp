@@ -1,6 +1,6 @@
 // Chess 
 #include "Chess.h"
-#include "GameManager.h"
+#include "board/GameManager.h"
 
 int main()
 {

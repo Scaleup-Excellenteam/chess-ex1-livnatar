@@ -1,6 +1,6 @@
 
-#include "Bishop.h"
-#include "ChessBoard.h"
+#include "pieces/Bishop.h"
+#include "board/ChessBoard.h"
 #include "GameConstants.h"
 
 //------------------------------------------------------------------------
