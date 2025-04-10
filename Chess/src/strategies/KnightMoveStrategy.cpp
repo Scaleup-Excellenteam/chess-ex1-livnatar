@@ -3,6 +3,14 @@
 #include "board/ChessBoard.h"
 
 //------------------------------------------------------------------------
+/**
+ * Validates a knight's move (L-shape: 2 by 1).
+ *
+ * @param board The current chess board.
+ * @param from  Starting position.
+ * @param to    Target position.
+ * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
+ */
 int KnightMoveStrategy::checkMovement(const ChessBoard& board,
                                       const std::pair<int, int>& from,
                                       const std::pair<int, int>& to) const {

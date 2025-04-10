@@ -3,6 +3,15 @@
 #include "board/ChessBoard.h"
 
 
+//------------------------------------------------------------------------
+/**
+ * Validates rook's movement (horizontal or vertical).
+ *
+ * @param board The chess board.
+ * @param from  Starting position.
+ * @param to    Target position.
+ * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
+ */
 int RookMoveStrategy::checkMovement(const ChessBoard& board, 
 	                                const std::pair<int, int>& from, 
 	                                const std::pair<int, int>& to) const {
