@@ -9,6 +9,7 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/pieces/Bishop.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/pieces/Queen.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/pieces/Knight.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/pieces/Pawn.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/factories/PieceFactory.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/factories/MoveStrategyFactory.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/RookMoveStrategy.cpp"
@@ -16,4 +17,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/KnightMoveStrategy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/KingMoveStrategy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/QueenMoveStrategy.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/strategies/PawnMoveStrategy.cpp"
 )
