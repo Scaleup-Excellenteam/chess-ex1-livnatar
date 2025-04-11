@@ -27,6 +27,24 @@ int KingMoveStrategy::checkMovement(const ChessBoard& board,
 
     // Kings can only move one square in any direction
     if (rowDiff > 1 || colDiff > 1) {
+
+       /* Note: Castling implementation would be checked here
+        To implement castling, we would need:
+        1. Check if king has moved before (requires move tracking)
+        2. Check if rook has moved before (requires move tracking)
+        3. Check if path between king and rook is clear
+        4. Check if king is in check or would pass through check
+        5. Handle the king moving two squares and the rook jumping over
+       
+        For example:
+        if (isCastlingMove(board, from, to)) {
+            if (canCastle(board, from, to)) {
+                // Would need to move the rook as well in *Chess* class
+                return MOVE_CASTLING; // New constant code response
+            }
+        }
+       */
+
         return MOVE_INVALID_OR_BLOCKED;
     }
 
@@ -35,8 +53,5 @@ int KingMoveStrategy::checkMovement(const ChessBoard& board,
         return MOVE_INVALID_OR_BLOCKED;
     }
 
-    // Castling would be handled here if implementing that feature
-
     return MOVE_SUCCESS;
-
 }
