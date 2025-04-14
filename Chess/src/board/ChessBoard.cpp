@@ -128,19 +128,3 @@ void ChessBoard::setupPieceAt(char pieceChar, const std::pair<int, int>& pos) {
     m_board[pos.first][pos.second] = PieceFactory::createPiece(pieceChar, pos);
 }
 //------------------------------------------------------------------------
-/**
- * Prints the current board state to the console (for debugging).
- */
-/*
-void ChessBoard::printBoard() const {
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            if (m_board[i][j])
-                std::cout << m_board[i][j]->getPieceType() << " ";
-            else
-                std::cout << ". ";
-        }
-        std::cout << "\n";
-    }
-}
-*/
