@@ -57,9 +57,11 @@ const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
  * @param isWhiteTurn Indicates whether it's white's turn.
  * @return Status code indicating the result of the move.
  */
-int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const {
+int ChessBoard::checkMovement(const std::pair<int, int>& from, 
+                              const std::pair<int, int>& to, 
+                              bool isWhiteTurn) const {
 
-    //If conversion failed - treat as "no piece at source" - not need to happen cause we check in Chess class
+    //If conversion failed - treat as code 11 - not need to happen cause we check in Chess class
     if (from.first == -1 || to.first == -1) {
 
         return MOVE_NO_PIECE_IN_SOURCE;  // Code 11
