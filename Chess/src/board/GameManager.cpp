@@ -49,7 +49,7 @@ std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
  */
 int GameManager::checkMovement(const std::string& move) {
     
-    // if invalid format - treat as "no piece at source" - not need to happen cause we check in Chess class
+    //Invalid format - treat as "no piece at source" - not need to happen cause we check in Chess class
     if (move.size() != 4) {
         return MOVE_NO_PIECE_IN_SOURCE; 
     }
