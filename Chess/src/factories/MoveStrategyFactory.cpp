@@ -7,6 +7,7 @@
 #include "strategies/KnightMoveStrategy.h"
 #include "strategies/KingMoveStrategy.h"
 #include "strategies/QueenMoveStrategy.h"
+#include "strategies/PawnMoveStrategy.h"
 
 //------------------------------------------------------------------------
 /**
@@ -29,6 +30,7 @@ void MoveStrategyFactory::initialize() {
     auto knightStrategy = std::make_shared<KnightMoveStrategy>();
     auto kingStrategy = std::make_shared<KingMoveStrategy>();
     auto queenStrategy = std::make_shared<QueenMoveStrategy>(rookStrategy, bishopStrategy);
+    auto pawnStrategy = std::make_shared<PawnMoveStrategy>();
 
     // Register all piece strategies
     m_strategies['R'] = rookStrategy;
@@ -45,6 +47,9 @@ void MoveStrategyFactory::initialize() {
 
     m_strategies['K'] = kingStrategy;
     m_strategies['k'] = kingStrategy;
+
+    m_strategies['P'] = pawnStrategy;
+    m_strategies['p'] = pawnStrategy;
 }
 //------------------------------------------------------------------------
 /**

@@ -57,9 +57,11 @@ const ChessPiece* ChessBoard::getPieceAt(int row, int col) const {
  * @param isWhiteTurn Indicates whether it's white's turn.
  * @return Status code indicating the result of the move.
  */
-int ChessBoard::checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const {
+int ChessBoard::checkMovement(const std::pair<int, int>& from, 
+                              const std::pair<int, int>& to, 
+                              bool isWhiteTurn) const {
 
-    //If conversion failed - treat as "no piece at source" - not need to happen cause we check in Chess class
+    //If conversion failed - treat as code 11 - not need to happen cause we check in Chess class
     if (from.first == -1 || to.first == -1) {
 
         return MOVE_NO_PIECE_IN_SOURCE;  // Code 11
@@ -128,19 +130,3 @@ void ChessBoard::setupPieceAt(char pieceChar, const std::pair<int, int>& pos) {
     m_board[pos.first][pos.second] = PieceFactory::createPiece(pieceChar, pos);
 }
 //------------------------------------------------------------------------
-/**
- * Prints the current board state to the console (for debugging).
- */
-/*
-void ChessBoard::printBoard() const {
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            if (m_board[i][j])
-                std::cout << m_board[i][j]->getPieceType() << " ";
-            else
-                std::cout << ". ";
-        }
-        std::cout << "\n";
-    }
-}
-*/

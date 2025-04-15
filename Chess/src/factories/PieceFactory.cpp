@@ -6,7 +6,8 @@
 #include "pieces/King.h"
 #include "pieces/Bishop.h" 
 #include "pieces/Queen.h" 
-#include "pieces/Knight.h" // Include other pieces when added
+#include "pieces/Knight.h" 
+#include "pieces/Pawn.h"
 
 
 //------------------------------------------------------------------------
@@ -67,7 +68,12 @@ void PieceFactory::initialize() {
         return std::make_unique<Knight>(false, 'n', pos);
         };
 
-    // Add other pieces 
+    m_pieceCreators['P'] = [](bool isWhite, char symbol, const std::pair<int, int>& pos) {
+        return std::make_unique<Pawn>(true, 'P', pos);
+        };
+    m_pieceCreators['p'] = [](bool isWhite, char symbol, const std::pair<int, int>& pos) {
+        return std::make_unique<Pawn>(false, 'p', pos);
+        };
 
 }
 
