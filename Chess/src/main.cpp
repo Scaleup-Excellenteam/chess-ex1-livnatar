@@ -2,6 +2,7 @@
 #include "Chess.h"
 #include "board/GameManager.h"
 
+
 int main()
 {
 	string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
