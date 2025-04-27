@@ -5,7 +5,11 @@
 #include <string>
 #include "exception/QueueExceptions.h"
 
-// Template class for a generic comparator
+//------------------------------------------------------------------------
+/**
+ * Template struct for a generic comparator.
+ * Default implementation assumes T supports operator-.
+ */
 template <typename T>
 struct MyComparator {
     int operator()(const T& a, const T& b) const {
@@ -14,37 +18,37 @@ struct MyComparator {
     }
 };
 
-// Forward declaration for the friend operator overload (to access private members)
+//------------------------------------------------------------------------
+/**
+ * Forward declaration of PriorityQueue class.
+ */
 template <typename T, typename Comparator>
 class PriorityQueue;
 
+//------------------------------------------------------------------------
+/**
+ * Forward declaration of stream insertion operator for PriorityQueue.
+ */
 template <typename T, typename Comparator>
 std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
 
 
-// Template class for PriorityQueue
+//------------------------------------------------------------------------
+/**
+ * Template class representing a fixed-size priority queue.
+ * Elements are ordered based on a provided comparator.
+ */
 template <typename T, typename Comparator = MyComparator<T>>
 class PriorityQueue {
 public:
-    // Constructor with optional max size
+
     PriorityQueue(size_t maxSize = 5);
 
-    // Push an element into the queue based on priority
     void push(const T& element);
-
-    // Get and remove the highest priority element
     T poll();
-
-    // Check if the queue is empty
     bool isEmpty() const;
-
-    // Get the size of the queue
     size_t size() const;
-
-    // Get all elements (for iteration)
     const std::list<T>& getElements() const;
-
-    // Friend declaration for operator overload
     friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
 
 private:
@@ -53,14 +57,24 @@ private:
     size_t m_maxSize;
 };
 
-//------------------------------------------------------------------------
+
 // Implementation of PriorityQueue methods
-// Constructor
+//------------------------------------------------------------------------
+/**
+* Constructs a PriorityQueue with an optional maximum size.
+*
+* @param maxSize The maximum number of elements the queue can hold (default 5).
+*/
 template <typename T, typename Comparator>
 PriorityQueue<T, Comparator>::PriorityQueue(size_t maxSize) : m_maxSize(maxSize) {};
 
 //------------------------------------------------------------------------
-// Push method
+/**
+* Pushes an element into the queue based on priority.
+* Throws QueueFullException if the element cannot be added.
+*
+* @param element The element to insert.
+*/
 
 template <typename T, typename Comparator>
 void PriorityQueue<T, Comparator>::push(const T& element) {
@@ -90,7 +104,12 @@ void PriorityQueue<T, Comparator>::push(const T& element) {
 }
 
 //------------------------------------------------------------------------
-// Poll method
+/**
+* Retrieves and removes the highest-priority element from the queue.
+* Throws QueueEmptyException if the queue is empty.
+*
+* @return The highest-priority element.
+*/
 
 template <typename T, typename Comparator>
 T PriorityQueue<T, Comparator>::poll() {
@@ -106,7 +125,11 @@ T PriorityQueue<T, Comparator>::poll() {
 }
 
 //------------------------------------------------------------------------
-// IsEmpty method
+/**
+* Checks if the queue is empty.
+*
+* @return true if the queue has no elements, false otherwise.
+*/
 
 template <typename T, typename Comparator>
 bool PriorityQueue<T, Comparator>::isEmpty() const {
@@ -114,7 +137,11 @@ bool PriorityQueue<T, Comparator>::isEmpty() const {
 }
 
 //------------------------------------------------------------------------
-// Size method
+/**
+* Returns the number of elements currently in the queue.
+*
+* @return The size of the queue.
+*/
 
 template <typename T, typename Comparator>
 size_t PriorityQueue<T, Comparator>::size() const {
@@ -122,14 +149,21 @@ size_t PriorityQueue<T, Comparator>::size() const {
 }
 
 //------------------------------------------------------------------------
-// GetElements method
+/**
+* Provides access to all elements in the queue.
+*
+* @return A const reference to the internal list of elements.
+*/
+
 template <typename T, typename Comparator>
 const std::list<T>& PriorityQueue<T, Comparator>::getElements() const {
     return m_elements;
 }
 
 //------------------------------------------------------------------------
-// Overload the << operator for PriorityQueue
+/**
+* Overloads the << operator to print the contents of the 3 top elements in the queue.
+*/
 
 template <typename T, typename Comparator>
 std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue) {
