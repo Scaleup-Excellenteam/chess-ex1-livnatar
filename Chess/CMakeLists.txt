@@ -25,5 +25,10 @@ add_subdirectory (src)
 
 # Test executable for PriorityQueue
 add_executable(TestPriorityQueue "")
+
+# Test executable for Move
+add_executable(TestMove "")
+
 add_subdirectory(tests)
+
 
