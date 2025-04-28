@@ -9,17 +9,12 @@ public:
     Move(const std::pair<int, int>& from, const std::pair<int, int>& to,
         int score = 0, char pieceType = ' ');
 
-    // Getters
     std::pair<int, int> getFrom() const;
     std::pair<int, int> getTo() const;
     int getScore() const;
     char getPieceType() const;
-
-    // Setters
     void setScore(int score);
     void setPieceType(char pieceType);
-
-    // Convert positions to chess notation
     std::string fromNotation() const;
     std::string toNotation() const;
     std::string getNotation() const;
@@ -42,10 +37,25 @@ struct MyComparator;
 
 //------------------------------------------------------------------------
 // Specialization of MyComparator for Move
+/**
+ * A comparator for Move objects, used for sorting moves by score.
+ *
+ * @tparam T The type to be compared (in this case, Move).
+ */
 template <>
 struct MyComparator<Move> {
+    
+    /**
+     * Compares two Move objects based on their score.
+     *
+     * @param a The first Move object.
+     * @param b The second Move object.
+     * @return A negative value if a has a lower score than b,
+     *         zero if they are equal,
+     *         and a positive value if a has a higher score than b.
+     */
     int operator()(const Move& a, const Move& b) const {
-        // Compare by score (default behavior for Move)
+        
         return a.getScore() - b.getScore();
     }
 };
