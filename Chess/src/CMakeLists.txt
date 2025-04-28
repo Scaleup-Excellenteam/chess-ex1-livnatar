@@ -19,5 +19,5 @@
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/QueenMoveStrategy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/strategies/PawnMoveStrategy.cpp"
    
-    "${CMAKE_CURRENT_SOURCE_DIR}/template/PriorityQueue.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include/template/PriorityQueue.h"
 )

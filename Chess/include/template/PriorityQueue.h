@@ -22,15 +22,15 @@ struct MyComparator {
 /**
  * Forward declaration of PriorityQueue class.
  */
-template <typename T, typename Comparator>
-class PriorityQueue;
+//template <typename T, typename Comparator>
+//class PriorityQueue;
 
 //------------------------------------------------------------------------
 /**
  * Forward declaration of stream insertion operator for PriorityQueue.
  */
-template <typename T, typename Comparator>
-std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
+//template <typename T, typename Comparator>
+//std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
 
 
 //------------------------------------------------------------------------
@@ -49,7 +49,21 @@ public:
     bool isEmpty() const;
     size_t size() const;
     const std::list<T>& getElements() const;
-    friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
+    
+    friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue){
+        os << "Priority Queue Contents:\n";
+        int count = 1;
+        for (const auto& element : queue.m_elements) {
+            os << count << ". " << element << "\n";
+            count++;
+
+            // Break after printing 3 top elements
+            if (count > 3) {
+                break;
+            }
+        }
+        return os;
+    }
 
 private:
     std::list<T> m_elements;
@@ -165,6 +179,7 @@ const std::list<T>& PriorityQueue<T, Comparator>::getElements() const {
 * Overloads the << operator to print the contents of the 3 top elements in the queue.
 */
 
+/*
 template <typename T, typename Comparator>
 std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue) {
    
@@ -180,4 +195,4 @@ std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& q
         }
     }
     return os;
-}
+}*/
