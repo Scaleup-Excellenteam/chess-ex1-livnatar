@@ -23,5 +23,7 @@ add_executable (Chess "")
 add_subdirectory (include)
 add_subdirectory (src)
 
-
+# Test executable for PriorityQueue
+add_executable(TestPriorityQueue "")
+add_subdirectory(tests)
 
