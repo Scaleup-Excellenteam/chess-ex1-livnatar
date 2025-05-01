@@ -10,9 +10,9 @@ class ChessBoard {
 public:
 
     ChessBoard(const std::string& boardStr);
+    ChessBoard(const ChessBoard& other);
 
-    // Delete copy constructor and assignment
-    ChessBoard(const ChessBoard&) = delete;
+    // Delete assignment
     ChessBoard& operator=(const ChessBoard&) = delete;
     
     // Add move constructor and assignment

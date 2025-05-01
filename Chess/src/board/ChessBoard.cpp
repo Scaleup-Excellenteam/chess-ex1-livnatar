@@ -130,3 +130,28 @@ void ChessBoard::setupPieceAt(char pieceChar, const std::pair<int, int>& pos) {
     m_board[pos.first][pos.second] = PieceFactory::createPiece(pieceChar, pos);
 }
 //------------------------------------------------------------------------
+
+ChessBoard::ChessBoard(const ChessBoard& other) {
+   
+    // Initialize the factory
+    PieceFactory::initialize();
+
+    // Resize the outer vector (rows)
+    m_board.resize(8);
+
+    // Resize each inner vector (columns) and initialize them as nullptr
+    for (int i = 0; i < 8; ++i) {
+        m_board[i].resize(8);
+    }
+
+    // Copy each piece from the other board
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            const ChessPiece* piece = other.getPieceAt(row, col);
+            if (piece) {
+                // Create a new piece with the same properties
+                setupPieceAt(piece->getPieceType(), { row, col });
+            }
+        }
+    }
+}

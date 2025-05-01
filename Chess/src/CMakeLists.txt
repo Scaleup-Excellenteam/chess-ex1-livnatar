@@ -21,4 +21,5 @@
    
     "${CMAKE_CURRENT_SOURCE_DIR}/../include/template/PriorityQueue.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/move/Move.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/move/MoveRecommender.cpp"
 )
