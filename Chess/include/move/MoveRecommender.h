@@ -24,12 +24,13 @@ private:
     PriorityQueue<Move> m_recommendations;
 
 
-    std::vector<Move> generateAllMoves(bool isWhiteTurn) const;
-    std::vector<Move> generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn) const;
+    std::vector<Move> generateAllMoves(bool isWhiteTurn, const ChessBoard& board) const;
+    std::vector<Move> generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn, const ChessBoard& board) const;
     int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& boardCopy);
-    int evaluatePosition(const Move& move, bool isWhiteTurn, const ChessBoard& boardCopy) const;
+    int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& boardCopy) const;
     int getPieceValue(char pieceType) const;
     bool isPieceInDanger(const std::pair<int, int>& pos, bool isWhitePiece, const ChessBoard& board) const;
+    int evaluateThreats(const std::pair<int, int>& to, bool isWhiteTurn, const ChessBoard& boardCopy) const;
     int centerControlBonus(const std::pair<int, int>& pos) const;
     int calculateBoardControl(bool isWhiteTurn, const ChessBoard& board) const;
 };

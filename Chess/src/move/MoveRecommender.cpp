@@ -2,7 +2,7 @@
 #include "move/MoveRecommender.h"
 #include <algorithm>
 #include <iostream>
-
+#include <climits> // For INT_MIN and INT_MAX
 
 //------------------------------------------------------------------------
 /**
@@ -23,54 +23,68 @@ MoveRecommender::MoveRecommender(const ChessBoard& board, int depth)
 */
 PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
 
-    // Clear previous recommendations
-    m_recommendations = PriorityQueue<Move>(5);
+    try{
+        // Clear previous recommendations
+        m_recommendations = PriorityQueue<Move>(5);
 
-    // Generate all possible moves
-    std::vector<Move> allMoves = generateAllMoves(isWhiteTurn);
+        // Generate all possible moves
+        std::vector<Move> allMoves = generateAllMoves(isWhiteTurn, m_board);
 
-    // For each move, create a copy of the board and evaluate
-    for (auto& move : allMoves) {
-        // Create a copy of the board for simulation
-        ChessBoard boardCopy(m_board); // Using copy constructor
-
-        // Evaluate the move
-        int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy);
-        move.setScore(score);
-
-        try {
-            m_recommendations.push(move);
+        
+        // If no moves are available, throw an exception
+        if (allMoves.empty()) {
+            throw NoMovesAvailableException();
         }
-        catch (const QueueFullException& e) {
-            // Queue is full and this move isn't good enough
-            // Just ignore it
+        
+        // For each move, create a copy of the board and evaluate
+        for (auto& move : allMoves) {
+        
+            // Create a copy of the board for simulation
+            ChessBoard boardCopy(m_board); // Using copy constructor
+
+            // Evaluate the move
+            int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy);
+            move.setScore(score);
+
+            try {
+                m_recommendations.push(move);
+            }
+            catch (const QueueFullException& e) {
+                // Queue is full and this move isn't good enough
+                // Just ignore it
+            }
         }
+
+        return m_recommendations;
     }
-
-    return m_recommendations;
+    catch (const std::exception& e) {
+        std::cerr << "Error in getRecommendations: " << e.what() << std::endl;
+        return PriorityQueue<Move>(5); // Return empty queue on error
+    }
 }
 //------------------------------------------------------------------------
 /**
 * Generate all valid moves for a player
 *
 * @param isWhiteTurn True if generating moves for white player
+* @param board The chess board to evaluate
 * @return Vector of all valid moves for the player
 */
-std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn) const {
+std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const ChessBoard& board) const {
 
     std::vector<Move> allMoves;
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
            
-            const ChessPiece* piece = m_board.getPieceAt(row, col);
+            const ChessPiece* piece = board.getPieceAt(row, col);
 
             if (piece && piece->getColor() == isWhiteTurn) {
                
                 std::pair<int, int> pos = { row, col };
 
                 // Get all valid moves for this piece
-                std::vector<Move> pieceMoves = generateMovesForPiece(pos, isWhiteTurn);
+                std::vector<Move> pieceMoves = generateMovesForPiece(pos, isWhiteTurn,board);
 
                 // Add them to our collection
                 allMoves.insert(allMoves.end(), pieceMoves.begin(), pieceMoves.end());
@@ -86,12 +100,13 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn) const {
 *
 * @param pos Position of the piece
 * @param isWhiteTurn True if generating moves for white pieces
+* @param board The chess board to evaluate
 * @return Vector of all valid moves for the piece
 */
-std::vector<Move> MoveRecommender::generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn) const {
+std::vector<Move> MoveRecommender::generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn, const ChessBoard& board) const {
 
     std::vector<Move> moves;
-    const ChessPiece* piece = m_board.getPieceAt(pos.first, pos.second);
+    const ChessPiece* piece = board.getPieceAt(pos.first, pos.second);
 
     if (!piece || piece->getColor() != isWhiteTurn) {
         return moves;
@@ -111,7 +126,7 @@ std::vector<Move> MoveRecommender::generateMovesForPiece(const std::pair<int, in
             }
 
             // Check if move is valid according to piece rules and the board
-            int moveStatus = m_board.checkMovement(pos, destPos, isWhiteTurn);
+            int moveStatus = board.checkMovement(pos, destPos, isWhiteTurn);
 
             if (moveStatus == MOVE_SUCCESS) {
                 // Valid move
@@ -135,13 +150,7 @@ std::vector<Move> MoveRecommender::generateMovesForPiece(const std::pair<int, in
 */
 int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& boardCopy) {
 
-    const std::pair<int, int>& from = move.getFrom();
-    const std::pair<int, int>& to = move.getTo();
-
-    // Make the move on our board copy
-    boardCopy.movePiece(from, to);
-
-    // Calculate immediate score for this position
+    // Calculate immediate score for position after a move
     int score = evaluatePosition(move, isWhiteTurn, boardCopy);
 
     // Base case: if we've reached maximum depth, return the score
@@ -151,18 +160,19 @@ int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth,
 
     // Look at opponent's responses
     bool opponentTurn = !isWhiteTurn;
-    std::vector<Move> opponentMoves = generateAllMoves(opponentTurn);
+    std::vector<Move> opponentMoves = generateAllMoves(opponentTurn, boardCopy);
 
     // If opponent has no moves, this is good for us
     if (opponentMoves.empty()) {
         return score + 50; // Bonus for limiting opponent options
     }
 
-    // Find opponent's best move
+    // Find opponent's best move (from their perspective)
     int bestOpponentScore = INT_MIN;
+    
     for (const auto& opponentMove : opponentMoves) {
         
-        // Create another board copy for deeper simulation
+        // Create another board copy for opponent's move
         ChessBoard deeperCopy(boardCopy);
 
         // Evaluate opponent's move (with depth - 1)
@@ -186,11 +196,17 @@ int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth,
 * @param boardCopy Reference to the board after the move
 * @return Score for the position after the move
 */
-int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, const ChessBoard& boardCopy) const {
+int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& boardCopy) const {
 
     int score = 0;
     const std::pair<int, int>& from = move.getFrom();
     const std::pair<int, int>& to = move.getTo();
+
+    // Capture target before move
+    const ChessPiece* capturedPiece = boardCopy.getPieceAt(to.first, to.second);
+
+    // Make the move on our board copy
+    boardCopy.movePiece(from, to);
 
     const ChessPiece* movedPiece = boardCopy.getPieceAt(to.first, to.second);
 
@@ -198,13 +214,9 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, const 
         return -1000; // Something went wrong with the simulation
     }
 
-    // 1. Capture value (we already captured in the simulation)
-    // If this was a capture, the piece is no longer at the destination
-    // We can detect captures by comparing board states, but for simplicity,
-    // we'll check if the destination had an opponent piece in the original board
-    const ChessPiece* originalDestPiece = m_board.getPieceAt(to.first, to.second);
-    if (originalDestPiece && originalDestPiece->getColor() != isWhiteTurn) {
-        score += getPieceValue(originalDestPiece->getPieceType());
+    // 1. Capture value
+    if (capturedPiece && capturedPiece->getColor() != isWhiteTurn) {
+        score += getPieceValue(capturedPiece->getPieceType());
     }
 
     // 2. Check if our piece is in danger after the move
@@ -214,38 +226,7 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, const 
     }
 
     // 3. Bonus for threatening opponent pieces after the move
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            
-            if (row == to.first && col == to.second) continue;    // Skip the destination square
-
-            const ChessPiece* targetPiece = boardCopy.getPieceAt(row, col);
-            if (targetPiece && targetPiece->getColor() != isWhiteTurn) {
-                
-                std::pair<int, int> targetPos = { row, col };
-
-                // If our piece can attack this opponent piece
-                if (movedPiece->checkMovement(boardCopy, targetPos) == MOVE_SUCCESS) {
-                    
-                    int targetValue = getPieceValue(targetPiece->getPieceType());
-                    int movedPieceValue = getPieceValue(movedPiece->getPieceType());
-
-                    if (targetValue > movedPieceValue) {
-                        // Threatening a stronger piece
-                        score += 3;
-                    }
-                    else if (targetValue == movedPieceValue) {
-                        // Threatening an equal piece
-                        score += 2;
-                    }
-                    else {
-                        // Threatening a weaker piece
-                        score += 1;
-                    }
-                }
-            }
-        }
-    }
+    score += evaluateThreats(to, isWhiteTurn, boardCopy);
 
     // 4. Center control bonus
     score += centerControlBonus(to);
@@ -285,6 +266,11 @@ int MoveRecommender::getPieceValue(char pieceType) const {
 */
 bool MoveRecommender::isPieceInDanger(const std::pair<int, int>& pos, bool isWhitePiece, const ChessBoard& board) const {
 
+    const ChessPiece* targetPiece = board.getPieceAt(pos.first, pos.second);
+    if (!targetPiece) {
+        return false;
+    }
+
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
 
@@ -308,10 +294,72 @@ bool MoveRecommender::isPieceInDanger(const std::pair<int, int>& pos, bool isWhi
                         }
                     }
                 }
+                /*
+                // Check if this opponent piece can attack our piece
+                if (board.checkMovement(opponentPos, pos, !isWhitePiece) == MOVE_SUCCESS) {
+                    // Per assignment requirements - any threat is considered danger
+                    return true;
+                }
+                */
             }
         }
     }
     return false;
+}
+//------------------------------------------------------------------------
+/**
+* Evaluate threats made by the piece that just moved
+*
+* @param to Destination position of the moved piece
+* @param isWhiteTurn True if it's white's turn
+* @param boardCopy Reference to the board after the move
+* @return Score bonus for threats made
+*/
+int MoveRecommender::evaluateThreats(const std::pair<int, int>& to, bool isWhiteTurn, const ChessBoard& boardCopy) const {
+    
+    int threatBonus = 0;
+    const ChessPiece* movedPiece = boardCopy.getPieceAt(to.first, to.second);
+
+    if (!movedPiece) {
+        return 0;
+    }
+
+    int movedPieceValue = getPieceValue(movedPiece->getPieceType());
+
+    // Check all board positions for opponent pieces we might threaten
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+
+            if (row == to.first && col == to.second) continue;  // Skip our own position
+
+            const ChessPiece* targetPiece = boardCopy.getPieceAt(row, col);
+            if (targetPiece && targetPiece->getColor() != isWhiteTurn) {
+
+                std::pair<int, int> targetPos = { row, col };
+
+                // Check if our moved piece can attack this opponent piece
+                if (boardCopy.checkMovement(to, targetPos, isWhiteTurn) == MOVE_SUCCESS) {
+
+                    int targetValue = getPieceValue(targetPiece->getPieceType());
+
+                    if (targetValue > movedPieceValue) {
+                        // Threatening a stronger piece
+                        threatBonus += 3;
+                    }
+                    else if (targetValue == movedPieceValue) {
+                        // Threatening an equal piece
+                        threatBonus += 2;
+                    }
+                    else {
+                        // Threatening a weaker piece
+                        threatBonus += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return threatBonus;
 }
 //------------------------------------------------------------------------
 /**
@@ -380,7 +428,7 @@ int MoveRecommender::calculateBoardControl(bool isWhiteTurn, const ChessBoard& b
                 }
             }
 
-            // Add to control counts
+            // Add to control counts - each square counts once per side
             if (controlledByUs) {
                 ourControl++;
             }

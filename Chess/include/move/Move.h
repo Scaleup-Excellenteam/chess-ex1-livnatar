@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include "exception/MoveExceptions.h"
 
 class Move {
 public:
