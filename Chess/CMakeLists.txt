@@ -29,6 +29,9 @@ add_executable(TestPriorityQueue "")
 # Test executable for Move
 add_executable(TestMove "")
 
+# Test executable for MoveRecommender
+add_executable(TestMoveRecommender "")
+
 add_subdirectory(tests)
 
 

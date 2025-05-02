@@ -74,7 +74,7 @@ void Move::setPieceType(char pieceType) {
  * @return A string representing the starting position in algebraic notation.
  */
 std::string Move::fromNotation() const {
-    return std::string(1, 'a' + m_from.second) + std::to_string(m_from.first + 1);
+    return std::string(1, 'a' + m_from.first) + std::to_string(m_from.second + 1);
 }
 //------------------------------------------------------------------------
 /**
@@ -83,7 +83,7 @@ std::string Move::fromNotation() const {
  * @return A string representing the target position in algebraic notation.
  */
 std::string Move::toNotation() const {
-    return std::string(1, 'a' + m_to.second) + std::to_string(m_to.first + 1);
+    return std::string(1, 'a' + m_to.first) + std::to_string(m_to.second + 1);
 }
 //------------------------------------------------------------------------
 /**
