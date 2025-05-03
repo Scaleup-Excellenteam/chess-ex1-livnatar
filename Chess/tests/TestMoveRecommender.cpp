@@ -1,8 +1,12 @@
+
+
+/*
 #include "move/MoveRecommender.h"
 #include "board/ChessBoard.h"
 #include "exception/MoveExceptions.h"
 #include "exception/QueueExceptions.h"
 #include <iostream>
+
 
 void testBasicRecommendations() {
     std::cout << "==== Testing Basic Recommendations ====" << std::endl;
@@ -94,8 +98,9 @@ int main() {
 
     return 0;
 }
+*/
 
-/*
+
 #include "move/MoveRecommender.h"
 #include "board/ChessBoard.h"
 #include "exception/MoveExceptions.h"
@@ -116,4 +121,3 @@ int main() {
         std::cerr << "No moves: " << e.what() << std::endl;
     }
 }
-*/

@@ -1,5 +1,6 @@
 #include "strategies/PawnMoveStrategy.h"
 #include "board/ChessBoard.h"
+#include "move/Move.h"
 #include <cstdlib> 
 
 

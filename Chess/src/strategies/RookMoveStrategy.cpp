@@ -1,7 +1,7 @@
 
 #include "strategies/RookMoveStrategy.h"
 #include "board/ChessBoard.h"
-
+#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**

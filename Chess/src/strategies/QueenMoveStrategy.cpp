@@ -1,6 +1,7 @@
 
 #include "strategies/QueenMoveStrategy.h"
 #include "board/ChessBoard.h"
+#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
