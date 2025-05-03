@@ -3,6 +3,7 @@
 #include "board/ChessBoard.h"
 #include "factories/MoveStrategyFactory.h"
 #include "GameConstants.h"
+#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -73,4 +74,20 @@ int ChessPiece::checkMovement(const ChessBoard& board, const std::pair<int, int>
     }
 
     return m_moveStrategy->checkMovement(board, m_position, newPos);
+}
+//------------------------------------------------------------------------
+/**
+ * Generates all valid moves for this piece based on its movement strategy.
+ * Uses the strategy pattern to delegate move generation depending on the piece type.
+ *
+ * @param board The current state of the chess board.
+ * @return A vector of valid moves for this piece; empty if no strategy is defined.
+ */
+std::vector<Move> ChessPiece::generateValidMoves(const ChessBoard& board) const {
+   
+    if (m_moveStrategy) {
+        
+        return m_moveStrategy->generateMoves(board, m_position, m_isWhite, m_pieceType);
+    }
+    return {};
 }

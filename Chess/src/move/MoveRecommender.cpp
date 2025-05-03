@@ -84,7 +84,10 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const Ches
                 std::pair<int, int> pos = { row, col };
 
                 // Get all valid moves for this piece
-                std::vector<Move> pieceMoves = generateMovesForPiece(pos, isWhiteTurn,board);
+                //std::vector<Move> pieceMoves = generateMovesForPiece(pos, isWhiteTurn,board);
+
+                // Use the new optimized method to get valid moves directly from the piece
+                std::vector<Move> pieceMoves = piece->generateValidMoves(board);
 
                 // Add them to our collection
                 allMoves.insert(allMoves.end(), pieceMoves.begin(), pieceMoves.end());
@@ -402,8 +405,8 @@ int MoveRecommender::calculateBoardControl(bool isWhiteTurn, const ChessBoard& b
             bool controlledByOpponent = false;
 
             // Check which pieces can move to this square
-            for (int row = 0; row < 8; ++row) {
-                for (int col = 0; col < 8; ++col) {
+            for (int row = 0; row < 8 && !(controlledByUs && controlledByOpponent); ++row) {
+                for (int col = 0; col < 8 && !(controlledByUs && controlledByOpponent); ++col) {
                     
                     const ChessPiece* piece = board.getPieceAt(row, col);
                     if (!piece) continue;  // empty square

@@ -154,6 +154,71 @@ bool PawnMoveStrategy::canCaptureDiagonally(const ChessBoard& board,
     }
     return false;
 }
+//------------------------------------------------------------------------
+/**
+ * Generates all valid moves for a pawn from the given position.
+ * Handles forward movement (1 or 2 squares from the starting rank) and diagonal captures.
+ * En passant and promotion are noted but not implemented in this function.
+ *
+ * @param board      The current state of the chess board.
+ * @param from       The current position of the pawn (row, column).
+ * @param isWhite    Indicates whether the pawn is white or black.
+ * @param pieceType  The character representing the piece type (e.g., 'P' for Pawn).
+ * @return A vector of valid moves including captures and double-step advances from the initial position.
+ */
+std::vector<Move> PawnMoveStrategy::generateMoves(const ChessBoard& board,
+                                                  const std::pair<int, int>& from,
+                                                  bool isWhite,
+                                                  char pieceType) const {
+
+    std::vector<Move> validMoves;
+    int row = from.first;
+    int col = from.second;
+
+    // Direction of movement based on color
+    int direction = isWhite ? 1 : -1;
+    int newRow = row + direction;
+
+    // Forward move
+    std::pair<int, int> oneStep = { newRow, col };
+    if (newRow >= 0 && newRow < 8 && !board.isOccupied(newRow, col)) {
+
+        validMoves.emplace_back(from, oneStep, 0, pieceType);
+
+        // Two squares forward from starting position
+        bool onStartingRank = (isWhite && row == 1) || (!isWhite && row == 6);
+        std::pair<int, int> twoStep = { row + (2 * direction) , col };
+        if (onStartingRank && !board.isOccupied(row + (2 * direction), col)) {
+           
+            validMoves.emplace_back(from, twoStep, 0, pieceType);
+        }
+    }
+
+    // Capture moves
+    for (int colOffset : {-1, 1}) {
+
+        int newCol = col + colOffset;
+
+        if (newCol >= 0 && newCol < 8) {
+            
+            std::pair<int, int> capturePos = { newRow, newCol };
+            
+            if (board.isOccupied(newRow, newCol)) {
+                const ChessPiece* piece = board.getPieceAt(newRow, newCol);
+                if (piece && piece->getColor() != isWhite) {
+                    validMoves.emplace_back(from, capturePos, 0, pieceType);
+                }
+            }
+
+            // TODO: En passant implementation would go here
+        }
+    }
+
+    // TODO: Promotion implementation would go here
+
+
+    return validMoves;
+}
 
 //------------------------------------------------------------------------
 /*

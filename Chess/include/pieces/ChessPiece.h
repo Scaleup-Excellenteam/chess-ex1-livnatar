@@ -2,9 +2,11 @@
 #pragma once
 #include <utility> 
 #include <memory>
+#include <vector>
 
 class ChessBoard;
 class MoveStrategy;
+class Move;
 
 class ChessPiece {
 public:
@@ -21,6 +23,7 @@ public:
     ChessPiece& operator=(ChessPiece&&) noexcept = default;
     
     int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const;
+    std::vector<Move> generateValidMoves(const ChessBoard& board) const;
     std::pair<int, int> getPosition() const;
     char getPieceType() const;
     bool getColor() const;
