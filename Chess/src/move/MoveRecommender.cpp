@@ -83,10 +83,7 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const Ches
                
                 std::pair<int, int> pos = { row, col };
 
-                // Get all valid moves for this piece
-                //std::vector<Move> pieceMoves = generateMovesForPiece(pos, isWhiteTurn,board);
-
-                // Use the new optimized method to get valid moves directly from the piece
+                // Get all valid moves directly from the piece
                 std::vector<Move> pieceMoves = piece->generateValidMoves(board);
 
                 // Add them to our collection
@@ -96,50 +93,6 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const Ches
     }
 
     return allMoves;
-}
-//------------------------------------------------------------------------
-/**
-* Generate all valid moves for a specific piece
-*
-* @param pos Position of the piece
-* @param isWhiteTurn True if generating moves for white pieces
-* @param board The chess board to evaluate
-* @return Vector of all valid moves for the piece
-*/
-std::vector<Move> MoveRecommender::generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn, const ChessBoard& board) const {
-
-    std::vector<Move> moves;
-    const ChessPiece* piece = board.getPieceAt(pos.first, pos.second);
-
-    if (!piece || piece->getColor() != isWhiteTurn) {
-        return moves;
-    }
-
-    char pieceType = piece->getPieceType();
-
-    // Check all possible destinations on the board
-    for (int destRow = 0; destRow < 8; ++destRow) {
-        for (int destCol = 0; destCol < 8; ++destCol) {
-
-            std::pair<int, int> destPos = { destRow, destCol };
-
-            // Skip the source position
-            if (destRow == pos.first && destCol == pos.second) {
-                continue;
-            }
-
-            // Check if move is valid according to piece rules and the board
-            int moveStatus = board.checkMovement(pos, destPos, isWhiteTurn);
-
-            if (moveStatus == MOVE_SUCCESS) {
-                // Valid move
-                Move move(pos, destPos, 0, pieceType);
-                moves.push_back(move);
-            }
-        }
-    }
-
-    return moves;
 }
 //------------------------------------------------------------------------
 /**
@@ -273,6 +226,8 @@ bool MoveRecommender::isPieceInDanger(const std::pair<int, int>& pos, bool isWhi
     if (!targetPiece) {
         return false;
     }
+    int targetValue = getPieceValue(targetPiece->getPieceType());
+
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
@@ -286,16 +241,12 @@ bool MoveRecommender::isPieceInDanger(const std::pair<int, int>& pos, bool isWhi
                 if (piece->checkMovement(board, pos) == MOVE_SUCCESS) {
                     
                     int attackerValue = getPieceValue(piece->getPieceType());
-                    const ChessPiece* targetPiece = board.getPieceAt(pos.first, pos.second);
 
-                    if (targetPiece) {
-                        int targetValue = getPieceValue(targetPiece->getPieceType());
-
-                        // We're especially concerned when a lower-value piece threatens our higher-value piece
-                        if (attackerValue < targetValue) {
-                            return true;
-                        }
+                    // We're especially concerned when a lower-value piece threatens our higher-value piece
+                    if (attackerValue < targetValue) {
+                        return true;
                     }
+                    
                 }
                 /*
                 // Check if this opponent piece can attack our piece
@@ -329,39 +280,31 @@ int MoveRecommender::evaluateThreats(const std::pair<int, int>& to, bool isWhite
 
     int movedPieceValue = getPieceValue(movedPiece->getPieceType());
 
-    // Check all board positions for opponent pieces we might threaten
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
+    // Get all valid moves for the moved piece
+    std::vector<Move> validMoves = movedPiece->generateValidMoves(boardCopy);
 
-            if (row == to.first && col == to.second) continue;  // Skip our own position
+    // Check each valid move to see if it threatens an opponent piece
+    for (const auto& move : validMoves) {
+        const std::pair<int, int>& targetPos = move.getTo();
+        const ChessPiece* targetPiece = boardCopy.getPieceAt(targetPos.first, targetPos.second);
 
-            const ChessPiece* targetPiece = boardCopy.getPieceAt(row, col);
-            if (targetPiece && targetPiece->getColor() != isWhiteTurn) {
+        if (targetPiece && targetPiece->getColor() != isWhiteTurn) {
+            int targetValue = getPieceValue(targetPiece->getPieceType());
 
-                std::pair<int, int> targetPos = { row, col };
-
-                // Check if our moved piece can attack this opponent piece
-                if (boardCopy.checkMovement(to, targetPos, isWhiteTurn) == MOVE_SUCCESS) {
-
-                    int targetValue = getPieceValue(targetPiece->getPieceType());
-
-                    if (targetValue > movedPieceValue) {
-                        // Threatening a stronger piece
-                        threatBonus += 3;
-                    }
-                    else if (targetValue == movedPieceValue) {
-                        // Threatening an equal piece
-                        threatBonus += 2;
-                    }
-                    else {
-                        // Threatening a weaker piece
-                        threatBonus += 1;
-                    }
-                }
+            if (targetValue > movedPieceValue) {
+                // Threatening a stronger piece
+                threatBonus += 3;
+            }
+            else if (targetValue == movedPieceValue) {
+                // Threatening an equal piece
+                threatBonus += 2;
+            }
+            else {
+                // Threatening a weaker piece
+                threatBonus += 1;
             }
         }
     }
-
     return threatBonus;
 }
 //------------------------------------------------------------------------
@@ -393,51 +336,43 @@ int MoveRecommender::centerControlBonus(const std::pair<int, int>& pos) const {
 */
 int MoveRecommender::calculateBoardControl(bool isWhiteTurn, const ChessBoard& board) const {
 
+    // Initialize control maps (true = controlled by player, false = not controlled)
+    bool ourControlMap[8][8] = { {false} };
+    bool opponentControlMap[8][8] = { {false} };
+
+    // For each piece, calculate all squares it controls
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            
+            const ChessPiece* piece = board.getPieceAt(row, col);
+            if (!piece) continue;  // Empty square
+
+            // Get all valid moves for this piece
+            std::vector<Move> validMoves = piece->generateValidMoves(board);
+
+            // Mark all squares this piece controls
+            for (const auto& move : validMoves) {
+                const std::pair<int, int>& controlPos = move.getTo();
+
+                // Mark as controlled by the appropriate side
+                if (piece->getColor() == isWhiteTurn) {
+                    ourControlMap[controlPos.first][controlPos.second] = true;
+                }
+                else {
+                    opponentControlMap[controlPos.first][controlPos.second] = true;
+                }
+            }
+        }
+    }
+
+    // Count controlled squares
     int ourControl = 0;
     int opponentControl = 0;
 
-    // Count controlled squares for each side
-    for (int destRow = 0; destRow < 8; ++destRow) {
-        for (int destCol = 0; destCol < 8; ++destCol) {
-
-            std::pair<int, int> destPos = { destRow, destCol };
-            bool controlledByUs = false;
-            bool controlledByOpponent = false;
-
-            // Check which pieces can move to this square
-            for (int row = 0; row < 8 && !(controlledByUs && controlledByOpponent); ++row) {
-                for (int col = 0; col < 8 && !(controlledByUs && controlledByOpponent); ++col) {
-                    
-                    const ChessPiece* piece = board.getPieceAt(row, col);
-                    if (!piece) continue;  // empty square
-
-                    std::pair<int, int> pos = { row, col };
-
-                    // Skip checking if the square has a piece of the same color
-                    const ChessPiece* destPiece = board.getPieceAt(destRow, destCol);
-                    if (destPiece && destPiece->getColor() == piece->getColor()) {
-                        continue;
-                    }
-
-                    // Check if this piece controls the destination square
-                    if (piece->checkMovement(board, destPos) == MOVE_SUCCESS) {
-                        if (piece->getColor() == isWhiteTurn) {
-                            controlledByUs = true;
-                        }
-                        else {
-                            controlledByOpponent = true;
-                        }
-                    }
-                }
-            }
-
-            // Add to control counts - each square counts once per side
-            if (controlledByUs) {
-                ourControl++;
-            }
-            if (controlledByOpponent) {
-                opponentControl++;
-            }
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            if (ourControlMap[row][col]) ourControl++;
+            if (opponentControlMap[row][col]) opponentControl++;
         }
     }
 

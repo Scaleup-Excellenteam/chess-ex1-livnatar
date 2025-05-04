@@ -25,7 +25,6 @@ private:
 
 
     std::vector<Move> generateAllMoves(bool isWhiteTurn, const ChessBoard& board) const;
-    std::vector<Move> generateMovesForPiece(const std::pair<int, int>& pos, bool isWhiteTurn, const ChessBoard& board) const;
     int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& boardCopy);
     int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& boardCopy) const;
     int getPieceValue(char pieceType) const;
