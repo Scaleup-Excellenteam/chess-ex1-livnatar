@@ -90,7 +90,7 @@ std::vector<Move> KingMoveStrategy::generateMoves(const ChessBoard& board,
         int newCol = col + dir.second;
 
         // Check if the new position is on the board
-        if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        if (isValidPosition(newRow,newCol)){
 
             std::pair<int, int> to = { newRow, newCol };
 

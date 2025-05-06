@@ -22,4 +22,9 @@ public:
                                             const std::pair<int, int>& from,
                                             bool isWhite,
                                             char pieceType) const = 0;
+protected:
+    // Helper method to validate board positions
+    bool isValidPosition(int row, int col) const {
+        return (row >= 0 && row < 8 && col >= 0 && col < 8);
+    }
 };

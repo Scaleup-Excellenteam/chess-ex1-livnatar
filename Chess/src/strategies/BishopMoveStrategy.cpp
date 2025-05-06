@@ -84,7 +84,7 @@ std::vector<Move> BishopMoveStrategy::generateMoves(const ChessBoard& board,
             int newCol = col + dCol * i;
 
             // Check if we're still on the board
-            if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
+            if (!isValidPosition(newRow,newCol)){ //newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
                 break;
             }
 
