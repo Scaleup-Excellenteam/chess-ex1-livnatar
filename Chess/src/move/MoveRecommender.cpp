@@ -381,12 +381,12 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn,
 int MoveRecommender::getPieceValue(char pieceType) const {
 
     switch (std::toupper(pieceType)) {
-    case 'P': return 1;  // Pawn
-    case 'N': return 3;  // Knight
-    case 'B': return 3;  // Bishop
-    case 'R': return 5;  // Rook
-    case 'Q': return 9;  // Queen
-    case 'K': return 100; // King - very high value
+    case 'P': return PAWN_VALUE; 
+    case 'N': return KNIGHT_VALUE; 
+    case 'B': return BISHOP_VALUE; 
+    case 'R': return ROOK_VALUE; 
+    case 'Q': return QUEEN_VALUE; 
+    case 'K': return KING_VALUE; 
     default: return 0;
     }
 }

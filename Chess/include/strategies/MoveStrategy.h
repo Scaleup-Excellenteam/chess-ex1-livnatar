@@ -25,6 +25,6 @@ public:
 protected:
     // Helper method to validate board positions
     bool isValidPosition(int row, int col) const {
-        return (row >= 0 && row < 8 && col >= 0 && col < 8);
+        return (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE);
     }
 };

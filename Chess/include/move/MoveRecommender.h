@@ -4,7 +4,7 @@
 #include "template/PriorityQueue.h"     
 #include <vector>   
 #include <climits> // For INT_MIN and INT_MAX
-
+#include "GameConstants.h"
 
 /**
  * Class responsible for analyzing the chess board and recommending
@@ -34,5 +34,5 @@ private:
 
     //int evaluateMove(const Move& move, bool isWhiteTurn, int depth,
      //ChessBoard& boardCopy, int alpha = INT_MIN, int beta = INT_MAX);
-
+    // Original evaluateMove - kept for compatibility
 };

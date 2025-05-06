@@ -14,3 +14,11 @@ const int MOVE_CAUSES_CHECK = 31;  // Move results in a check for the moving pla
 const int MOVE_SUCCESS = 42;  // Valid move: piece moves from source to destination, and turn changes
 const int MOVE_SUCCESS_CHECK = 41;  // Valid move that results in a check: same as MOVE_SUCCESS, but also displays a check message
 
+const int PAWN_VALUE = 1;
+const int KNIGHT_VALUE = 3;
+const int BISHOP_VALUE = 3;
+const int ROOK_VALUE = 5;
+const int QUEEN_VALUE = 9;
+const int KING_VALUE = 100;
+
+const int BOARD_SIZE = 8;
