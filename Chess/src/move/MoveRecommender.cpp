@@ -162,6 +162,7 @@ int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth,
 
     return score;
 }
+//------------------------------------------------------------------------
 /**
 * Calculate score for a potential move with recursive depth using Alpha-Beta pruning
 *

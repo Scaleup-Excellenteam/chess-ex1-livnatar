@@ -130,7 +130,14 @@ void ChessBoard::setupPieceAt(char pieceChar, const std::pair<int, int>& pos) {
     m_board[pos.first][pos.second] = PieceFactory::createPiece(pieceChar, pos);
 }
 //------------------------------------------------------------------------
-
+/**
+ * Copy constructor for the ChessBoard class.
+ * Initializes a new board as a deep copy of another board, duplicating all pieces
+ * at their respective positions. Uses the PieceFactory to instantiate new pieces
+ * based on the type of each piece on the source board.
+ *
+ * @param other The ChessBoard instance to copy from.
+ */
 ChessBoard::ChessBoard(const ChessBoard& other) {
    
     // Initialize the factory
