@@ -20,7 +20,6 @@ int main() {
     }
 }
 */
-
 #include "move/MoveRecommender.h"
 #include "board/ChessBoard.h"
 #include "exception/MoveExceptions.h"
@@ -83,6 +82,55 @@ int main() {
     // - Rows are labeled a-h from top to bottom
     // - Columns are labeled 0-7 from left to right
 
+    runTest("Initial Position (depth 0)",
+        "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
+        true, 0);
+
+    runTest("Initial Position (depth 1)",
+        "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
+        true, 1);
+
+    runTest("Mid-Game Capture Scenario",
+        "R#BQKBNRP#PPPPPP#P####P#########n#######P#####Ppppp#ppp#rnbqkb#r",
+        true, 1);
+
+    runTest("Check Threat Evaluation",
+        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+        false, 2);
+
+    runTest("Depth 0 Evaluation",
+        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+        false, 0);
+
+    runTest("Depth 1 Evaluation",
+        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+        false, 1);
+
+    runTest("Depth 2 Evaluation",
+        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+        false, 2);
+
+    runTest("Simple Endgame Position",
+        "####K###############################################R#k#########",
+        true, 2);
+
+    runTest("Material Advantage Position",
+        "R#BQK##R#PPPPPPP########n######################p###pppp#r#b#kb#r",
+        true, 2);
+
+    runTest("Pawn Promotion Scenario",
+        "#######P############################################k##########K",
+        true, 2);
+
+    runTest("Stalemate Detection",
+        "#######k############################################K###########",
+        false, 2);
+
+    runTest("Checkmate Detection",
+        "#######k############################################Q##########K",
+        false, 2);
+
+    /*
     // Test 1: Initial position
     runTest("Initial Position",
         "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
@@ -107,7 +155,7 @@ int main() {
     runTest("Depth Testing - Depth 2",
         "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
         false, 2);
-/*
+
     runTest("Depth Testing - Depth 3",
         "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
         false, 3);
