@@ -45,15 +45,13 @@ PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
 
             // Evaluate the move
             int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy);
-           // int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy, INT_MIN, INT_MAX);
             move.setScore(score);
 
             try {
                 m_recommendations.push(move);
             }
             catch (const QueueFullException& e) {
-                // Queue is full and this move isn't good enough
-                // Just ignore it
+                // Queue is full and this move isn't good enough - Just ignore it             
             }
             catch (const std::exception& e) {
                 std::cerr << "Error in getRecommendations: " << e.what() << std::endl;
@@ -62,9 +60,12 @@ PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
 
         return m_recommendations;
     }
-    catch (const std::exception& e) {
-        std::cerr << "Error in getRecommendations: " << e.what() << std::endl;
-        return PriorityQueue<Move>(5); // Return empty queue on error
+    catch (const NoMovesAvailableException& ex) { 
+        throw;  // Re-throw to be handled by caller
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "Error in getRecommendations: " << ex.what() << std::endl;      
+        return PriorityQueue<Move>(5);  // Return empty queue on error
     }
 }
 //------------------------------------------------------------------------

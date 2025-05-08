@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdexcept>
 #include "factories/PieceFactory.h"
+#include "exception/InvalidTurnCountException.h"
+#include "exception/MoveExceptions.h"
 
 //------------------------------------------------------------------------
 /**
@@ -14,7 +16,9 @@ GameManager::GameManager(const std::string& boardStr)
     m_isWhiteTurn(true),
     m_capturedWhitePieces(),
     m_capturedBlackPieces(),
-    m_lastCaptured(nullptr) {}
+    m_lastCaptured(nullptr),
+    m_recommender(*m_chessBoard),
+    m_recommendationDepth(2) {}
 
 //------------------------------------------------------------------------
 /**
@@ -251,7 +255,81 @@ void GameManager::undoLastMove(const std::pair<int, int>& from, const std::pair<
         m_lastCaptured = nullptr;
     }
 }
+//------------------------------------------------------------------------
+/**
+ * Prompts the user to enter the number of turns ahead the recommendation engine should evaluate.
+ * Keeps prompting until valid input is provided (minimum 1 turn).
+ * Sets the internal recommendation depth (turns - 1).
+ */
+void GameManager::promptUserForRecommendationTurns() {
+    
+    while (true) {
+        std::cout << "Enter how many turns ahead the Move Recommender should analyze (minimum 1): ";
+        int userInput;
 
+        if (!(std::cin >> userInput)) {
+            std::cerr << "Invalid input. Please enter a number.\n";
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard bad input
+            continue;
+        }
+
+        try {
+            setRecommendationDepth(userInput);
+            std::cout << "Move recommender will analyze " << userInput << " turn(s) ahead." << std::endl;
+            break;
+        }
+        catch (const InvalidTurnCountException& ex) {
+            std::cerr << "Error: " << ex.what() << "\nPlease try again.\n";
+        }
+    }
+}
+//------------------------------------------------------------------------
+/**
+ * Sets the number of turns the recommendation engine should analyze.
+ * Converts the user-facing turn count into internal recommendation depth (turns - 1).
+ *
+ * @param turns The number of full turns the player wants the AI to evaluate (must be >= 1).
+ * @throws InvalidTurnCountException If the provided number of turns is less than or equal to 0.
+ */
+void GameManager::setRecommendationDepth(int turns) {
+    
+    if (turns <= 0) {
+        throw InvalidTurnCountException(turns);
+    }
+    m_recommendationDepth = turns - 1;
+    m_recommender.setDepth(m_recommendationDepth);
+}
+//------------------------------------------------------------------------
+/**
+ * Shows the top 3 recommended moves for the current player.
+ * Uses the overloaded << operator to display the recommendations.
+ */
+void GameManager::showRecommendations() {
+    
+    try {
+        std::cout << "\nRecommended moves for "
+            << (m_isWhiteTurn ? "White" : "Black")
+            << " player:" << std::endl;
+
+        PriorityQueue<Move> recommendations = m_recommender.getRecommendations(m_isWhiteTurn);
+
+        if (recommendations.isEmpty()) {
+            throw NoMovesAvailableException();
+        }
+        else {
+            // Use the overloaded << operator to display recommendations
+            std::cout << recommendations << std::endl;
+        }
+    }
+    catch (const NoMovesAvailableException& ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "Error generating recommendations: " << ex.what() << std::endl;
+    }
+}
+//------------------------------------------------------------------------
 /*
 * for future:
 

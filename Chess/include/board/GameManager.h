@@ -4,7 +4,7 @@
 #include <memory>
 #include "board/ChessBoard.h"
 #include "GameConstants.h"
-
+#include "move/MoveRecommender.h"
 
 /*
 Input Handling Note:
@@ -25,6 +25,9 @@ public:
     GameManager& operator=(const GameManager&) = delete;
 
     int checkMovement(const std::string& move);
+
+    void showRecommendations();
+    void promptUserForRecommendationTurns();
    
     // Accessor methods for future (UI display...)
     //const std::vector<std::unique_ptr<ChessPiece>>& getCapturedWhitePieces() const;
@@ -37,6 +40,10 @@ private:
     std::vector<std::unique_ptr<ChessPiece>> m_capturedWhitePieces;
     std::vector<std::unique_ptr<ChessPiece>> m_capturedBlackPieces;
     std::unique_ptr<ChessPiece> m_lastCaptured;
+
+    MoveRecommender m_recommender;
+    int m_recommendationDepth;
+
    
     std::pair<int, int> convertPosition(const std::string& pos) const;
     std::pair<int, int> findKingPosition(bool isWhiteKing) const;
@@ -45,4 +52,5 @@ private:
     int checkOpponentInCheck();
     void makeMove(const std::pair<int, int>& from, const std::pair<int, int>& to);
     void undoLastMove(const std::pair<int, int>& from, const std::pair<int, int>& to);
+    void setRecommendationDepth(int turns);
 };

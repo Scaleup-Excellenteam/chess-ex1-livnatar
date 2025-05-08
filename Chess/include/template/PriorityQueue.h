@@ -51,7 +51,7 @@ public:
     const std::list<T>& getElements() const;
     
     friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue){
-        os << "Priority Queue Contents:\n";
+
         int count = 1;
         for (const auto& element : queue.m_elements) {
             os << count << ". " << element << "\n";
