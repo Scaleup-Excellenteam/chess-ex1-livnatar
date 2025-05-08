@@ -1,25 +1,4 @@
-/*
-#include "move/MoveRecommender.h"
-#include "board/ChessBoard.h"
-#include "exception/MoveExceptions.h"
-#include <iostream>
 
-int main() {
-    
-    std::string boardStr = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr";
-
-    ChessBoard board(boardStr);
-    MoveRecommender recommender(board, 2);
-
-    try {
-        PriorityQueue<Move> recs = recommender.getRecommendations(true);
-        std::cout << recs << std::endl;
-    }
-    catch (const NoMovesAvailableException& e) {
-        std::cerr << "No moves: " << e.what() << std::endl;
-    }
-}
-*/
 #include "move/MoveRecommender.h"
 #include "board/ChessBoard.h"
 #include "exception/MoveExceptions.h"
@@ -128,48 +107,7 @@ int main() {
 
     runTest("Checkmate Detection",
         "#######k############################################Q##########K",
-        false, 2);
-
-    /*
-    // Test 1: Initial position
-    runTest("Initial Position",
-        "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
         true, 2);
-
-    // Test 2: Mid-game position with potential captures
-    runTest("Mid-game Position",
-        "R#BQKBNRP#PPPPPP#P####P#########n#######P#####Ppppp#ppp#rnbqkb#r",
-        //"R#BQK##R#PPPPPPP########n######################p###pppp#r#b#kb#r",
-        true, 2);
-
-    // Test 3: Position with check threat
-    runTest("Check Threat Position",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 2);
-
-    // Test 4: Testing different depths
-    runTest("Depth Testing - Depth 1",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 1);
-
-    runTest("Depth Testing - Depth 2",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 2);
-
-    runTest("Depth Testing - Depth 3",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 3);
-
-    // Test 5: Simple endgame position
-    runTest("Simple Endgame Position",
-        "####K###############################################R#k#########",
-        true, 2);
-
-    // Test 6: Material advantage position
-    runTest("Material Advantage Position",
-        "R#BQK##R#PPPPPPP########n######################p###pppp#r#b#kb#r",
-        true, 2);
-        */
 
     return 0;
 }
