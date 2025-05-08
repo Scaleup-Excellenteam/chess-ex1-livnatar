@@ -1,6 +1,7 @@
 
 #include "strategies/BishopMoveStrategy.h"
 #include "board/ChessBoard.h"
+#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -49,4 +50,62 @@ int BishopMoveStrategy::checkMovement(const ChessBoard& board,
     return MOVE_SUCCESS;
 }
 
+//------------------------------------------------------------------------
+/**
+ * Generates all valid diagonal moves for a bishop from the given position.
+ * The bishop can move in all four diagonal directions until it is blocked
+ * by another piece or the edge of the board.
+ *
+ * @param board      The current state of the chess board.
+ * @param from       The current position of the bishop (row, column).
+ * @param isWhite    Indicates whether the bishop is white or black.
+ * @param pieceType  The character representing the piece type (e.g., 'B' for Bishop).
+ * @return A vector of valid moves including captures, excluding blocked paths.
+ */
+std::vector<Move> BishopMoveStrategy::generateMoves(const ChessBoard& board,
+                                                    const std::pair<int, int>& from,
+                                                    bool isWhite,
+                                                    char pieceType) const {
 
+    std::vector<Move> validMoves;
+    int row = from.first;
+    int col = from.second;
+
+    // Directions: north-east, south-east, south-west, north-west
+    const std::pair<int, int> directions[4] = { {-1, 1}, {1, 1}, {1, -1}, {-1, -1} };
+
+    // Generate moves in each of the four directions
+    for (const auto& dir : directions) {
+        int dRow = dir.first;
+        int dCol = dir.second;
+
+        for (int i = 1; i < 8; ++i) {
+            int newRow = row + dRow * i;
+            int newCol = col + dCol * i;
+
+            // Check if we're still on the board
+            if (!isValidPosition(newRow,newCol)){ //newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
+                break;
+            }
+
+            std::pair<int, int> to = { newRow, newCol };
+
+            if (!board.isOccupied(newRow, newCol)) {
+                // Empty square, add as a valid move
+                validMoves.emplace_back(from, to, 0, pieceType);
+            }
+            else {
+                // Occupied square
+                const ChessPiece* piece = board.getPieceAt(newRow, newCol);
+                if (piece && piece->getColor() != isWhite) {
+                    // Enemy piece, can capture
+                    validMoves.emplace_back(from, to, 0, pieceType);
+                }
+                // Stop looking in this direction (blocked)
+                break;
+            }
+        }
+    }
+
+    return validMoves;
+}

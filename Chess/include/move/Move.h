@@ -2,12 +2,12 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include "exception/MoveExceptions.h"
 
 class Move {
 public:
-    // Constructor
     Move(const std::pair<int, int>& from, const std::pair<int, int>& to,
-        int score = 0, char pieceType = ' ');
+         int score = 0, char pieceType = ' ');
 
     std::pair<int, int> getFrom() const;
     std::pair<int, int> getTo() const;

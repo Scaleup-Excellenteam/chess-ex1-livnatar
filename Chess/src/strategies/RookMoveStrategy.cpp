@@ -1,7 +1,7 @@
 
 #include "strategies/RookMoveStrategy.h"
 #include "board/ChessBoard.h"
-
+#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -54,6 +54,66 @@ int RookMoveStrategy::checkMovement(const ChessBoard& board,
 
     // Path is clear - movement is valid
     return MOVE_SUCCESS;
+}
+//------------------------------------------------------------------------
+/**
+ * Generates all valid horizontal and vertical moves for a rook from the given position.
+ * The rook moves in straight lines along rows and columns and can capture enemy pieces in its path.
+ * The move generation stops when the rook is blocked by a piece (either ally or enemy).
+ *
+ * @param board      The current state of the chess board.
+ * @param from       The current position of the rook (row, column).
+ * @param isWhite    Indicates whether the rook is white or black.
+ * @param pieceType  The character representing the piece type (e.g., 'R' for Rook).
+ * @return A vector of valid moves including captures; excludes blocked paths and out-of-bounds positions.
+ */
+std::vector<Move> RookMoveStrategy::generateMoves(const ChessBoard& board,
+                                                  const std::pair<int, int>& from,
+                                                  bool isWhite,
+                                                  char pieceType) const{
+    
+    std::vector<Move> validMoves;
+    int row = from.first;
+    int col = from.second;
+
+    // Directions: up, right, down, left
+    const std::pair<int, int> directions[4] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1} };
+
+    // Generate moves in each of the four directions
+    for (const auto& dir : directions) {
+        int dRow = dir.first;
+        int dCol = dir.second;
+
+        for (int i = 1; i < 8; ++i) {
+            
+            int newRow = row + dRow * i;
+            int newCol = col + dCol * i;
+
+            // Check if new position is on the board
+            if (!isValidPosition(newRow,newCol)){
+                break;
+            }
+
+            std::pair<int, int> to = { newRow, newCol };
+
+            if (!board.isOccupied(newRow, newCol)) {
+                // Empty square, add as a valid move
+                validMoves.emplace_back(from, to, 0, pieceType);
+            }
+            else {
+                // Occupied square
+                const ChessPiece* piece = board.getPieceAt(newRow, newCol);
+                if (piece && piece->getColor() != isWhite) {
+                    // Enemy piece, can capture
+                    validMoves.emplace_back(from, to, 0, pieceType);
+                }
+                // Stop looking in this direction (blocked)
+                break;
+            }
+        }
+    }
+
+    return validMoves;
 }
 
 
