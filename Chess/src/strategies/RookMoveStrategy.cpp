@@ -1,7 +1,5 @@
 
 #include "strategies/RookMoveStrategy.h"
-#include "board/ChessBoard.h"
-#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -12,7 +10,7 @@
  * @param to    Target position.
  * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
  */
-int RookMoveStrategy::checkMovement(const ChessBoard& board, 
+int RookMoveStrategy::checkMovement(const IBoardState& board,
 	                                const std::pair<int, int>& from, 
 	                                const std::pair<int, int>& to) const {
 
@@ -67,7 +65,7 @@ int RookMoveStrategy::checkMovement(const ChessBoard& board,
  * @param pieceType  The character representing the piece type (e.g., 'R' for Rook).
  * @return A vector of valid moves including captures; excludes blocked paths and out-of-bounds positions.
  */
-std::vector<Move> RookMoveStrategy::generateMoves(const ChessBoard& board,
+std::vector<Move> RookMoveStrategy::generateMoves(const IBoardState& board,
                                                   const std::pair<int, int>& from,
                                                   bool isWhite,
                                                   char pieceType) const{
@@ -90,7 +88,7 @@ std::vector<Move> RookMoveStrategy::generateMoves(const ChessBoard& board,
             int newCol = col + dCol * i;
 
             // Check if new position is on the board
-            if (!isValidPosition(newRow,newCol)){
+            if (!board.isValidPosition(newRow,newCol)){
                 break;
             }
 

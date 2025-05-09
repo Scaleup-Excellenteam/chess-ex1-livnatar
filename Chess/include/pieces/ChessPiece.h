@@ -3,10 +3,10 @@
 #include <utility> 
 #include <memory>
 #include <vector>
+#include "board/IBoardState.h"
+#include "move/Move.h"
 
-class ChessBoard;
 class MoveStrategy;
-class Move;
 
 class ChessPiece {
 public:
@@ -22,8 +22,8 @@ public:
     ChessPiece(ChessPiece&&) noexcept = default;
     ChessPiece& operator=(ChessPiece&&) noexcept = default;
     
-    int checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const;
-    std::vector<Move> generateValidMoves(const ChessBoard& board) const;
+    int checkMovement(const IBoardState& board, const std::pair<int, int>& newPos) const;
+    std::vector<Move> generateValidMoves(const IBoardState& board) const;
     std::pair<int, int> getPosition() const;
     char getPieceType() const;
     bool getColor() const;

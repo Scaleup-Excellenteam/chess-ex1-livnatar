@@ -5,37 +5,37 @@
 class PawnMoveStrategy : public MoveStrategy {
 
 public:
-    int checkMovement(const ChessBoard& board,
+    int checkMovement(const IBoardState& board,
                       const std::pair<int, int>& from,
                       const std::pair<int, int>& to) const override;
 
-    std::vector<Move> generateMoves(const ChessBoard& board,
+    std::vector<Move> generateMoves(const IBoardState& board,
         const std::pair<int, int>& from,
         bool isWhite,
         char pieceType) const override;
 
 private:
-    bool canMoveForward(const ChessBoard& board,
+    bool canMoveForward(const IBoardState& board,
                         bool isWhite,
                         const std::pair<int, int>& from,
                         const std::pair<int, int>& to) const;
 
-    bool canMoveTwoSquares(const ChessBoard& board,
+    bool canMoveTwoSquares(const IBoardState& board,
                            bool isWhite,
                            const std::pair<int, int>& from,
                            const std::pair<int, int>& to) const;
 
-    bool canCaptureDiagonally(const ChessBoard& board,
+    bool canCaptureDiagonally(const IBoardState& board,
                               bool isWhite,
                               const std::pair<int, int>& from,
                               const std::pair<int, int>& to) const;
 
-    void addForwardMoves(const ChessBoard& board,
+    void addForwardMoves(const IBoardState& board,
                          std::vector<Move>& validMoves,
                          const std::pair<int, int>& from,
                          int row, int col, int direction,
                          bool isWhite, char pieceType) const;
-    void addCaptureMoves(const ChessBoard& board,
+    void addCaptureMoves(const IBoardState& board,
                          std::vector<Move>& validMoves,
                          const std::pair<int, int>& from,
                          int row, int col, int direction,

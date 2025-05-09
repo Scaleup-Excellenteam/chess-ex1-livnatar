@@ -1,7 +1,5 @@
 
 #include "strategies/BishopMoveStrategy.h"
-#include "board/ChessBoard.h"
-#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -12,7 +10,7 @@
  * @param to    Destination position.
  * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
  */
-int BishopMoveStrategy::checkMovement(const ChessBoard& board,
+int BishopMoveStrategy::checkMovement(const IBoardState& board,
                                       const std::pair<int, int>& from,
                                       const std::pair<int, int>& to) const {
 
@@ -62,7 +60,7 @@ int BishopMoveStrategy::checkMovement(const ChessBoard& board,
  * @param pieceType  The character representing the piece type (e.g., 'B' for Bishop).
  * @return A vector of valid moves including captures, excluding blocked paths.
  */
-std::vector<Move> BishopMoveStrategy::generateMoves(const ChessBoard& board,
+std::vector<Move> BishopMoveStrategy::generateMoves(const IBoardState& board,
                                                     const std::pair<int, int>& from,
                                                     bool isWhite,
                                                     char pieceType) const {
@@ -84,7 +82,7 @@ std::vector<Move> BishopMoveStrategy::generateMoves(const ChessBoard& board,
             int newCol = col + dCol * i;
 
             // Check if we're still on the board
-            if (!isValidPosition(newRow,newCol)){ //newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
+            if (!board.isValidPosition(newRow,newCol)){ //newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
                 break;
             }
 

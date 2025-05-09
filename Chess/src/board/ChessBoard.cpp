@@ -162,3 +162,8 @@ ChessBoard::ChessBoard(const ChessBoard& other) {
         }
     }
 }
+//------------------------------------------------------------------------
+bool ChessBoard::isValidPosition(int row, int col) const {
+
+    return (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE);
+}

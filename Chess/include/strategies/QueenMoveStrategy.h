@@ -8,11 +8,11 @@ public:
     QueenMoveStrategy(std::shared_ptr<MoveStrategy> rookStrategy,
                       std::shared_ptr<MoveStrategy> bishopStrategy);
 
-    int checkMovement(const ChessBoard& board,
+    int checkMovement(const IBoardState& board,
                       const std::pair<int, int>& from,
                       const std::pair<int, int>& to) const override;
 
-    std::vector<Move> generateMoves(const ChessBoard& board,
+    std::vector<Move> generateMoves(const IBoardState& board,
                                     const std::pair<int, int>& from,
                                     bool isWhite,
                                     char pieceType) const override;

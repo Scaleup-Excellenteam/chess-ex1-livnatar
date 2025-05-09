@@ -1,9 +1,7 @@
 
 #include "pieces/ChessPiece.h"
-#include "board/ChessBoard.h"
 #include "factories/MoveStrategyFactory.h"
 #include "GameConstants.h"
-#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -67,7 +65,7 @@ bool ChessPiece::getColor() const {
  * @param newPos  The position to move to.
  * @return MOVE_SUCCESS if the move is valid, otherwise MOVE_INVALID_OR_BLOCKED.
  */
-int ChessPiece::checkMovement(const ChessBoard& board, const std::pair<int, int>& newPos) const {
+int ChessPiece::checkMovement(const IBoardState& board, const std::pair<int, int>& newPos) const {
    
     if (!m_moveStrategy) {
         return MOVE_INVALID_OR_BLOCKED; // No strategy defined - fallback for any unexpected or malformed input
@@ -83,7 +81,7 @@ int ChessPiece::checkMovement(const ChessBoard& board, const std::pair<int, int>
  * @param board The current state of the chess board.
  * @return A vector of valid moves for this piece; empty if no strategy is defined.
  */
-std::vector<Move> ChessPiece::generateValidMoves(const ChessBoard& board) const {
+std::vector<Move> ChessPiece::generateValidMoves(const IBoardState& board) const {
    
     if (m_moveStrategy) {
         

@@ -1,6 +1,4 @@
 #include "strategies/PawnMoveStrategy.h"
-#include "board/ChessBoard.h"
-#include "move/Move.h"
 #include <cstdlib> 
 
 
@@ -14,7 +12,7 @@
  * @param to    Target position to move to.
  * @return MOVE_SUCCESS if the move is valid, otherwise MOVE_INVALID_OR_BLOCKED.
  */
-int PawnMoveStrategy::checkMovement(const ChessBoard& board,
+int PawnMoveStrategy::checkMovement(const IBoardState& board,
                                     const std::pair<int, int>& from,
                                     const std::pair<int, int>& to) const {
     
@@ -78,7 +76,7 @@ int PawnMoveStrategy::checkMovement(const ChessBoard& board,
  * @param to         Target position.
  * @return true if move is valid.
  */
-bool PawnMoveStrategy::canMoveForward(const ChessBoard& board,
+bool PawnMoveStrategy::canMoveForward(const IBoardState& board,
                                       bool isWhite,
                                       const std::pair<int, int>& from,
                                       const std::pair<int, int>& to) const {
@@ -106,7 +104,7 @@ bool PawnMoveStrategy::canMoveForward(const ChessBoard& board,
  * @param to         Target position.
  * @return true if two-square move is valid.
  */
-bool PawnMoveStrategy::canMoveTwoSquares(const ChessBoard& board,
+bool PawnMoveStrategy::canMoveTwoSquares(const IBoardState& board,
                                          bool isWhite,
                                          const std::pair<int, int>& from,
                                          const std::pair<int, int>& to) const {
@@ -138,7 +136,7 @@ bool PawnMoveStrategy::canMoveTwoSquares(const ChessBoard& board,
  * @param to         Target capture position.
  * @return true if diagonal capture is allowed.
  */
-bool PawnMoveStrategy::canCaptureDiagonally(const ChessBoard& board,
+bool PawnMoveStrategy::canCaptureDiagonally(const IBoardState& board,
                                             bool isWhite,
                                             const std::pair<int, int>& from,
                                             const std::pair<int, int>& to) const {
@@ -167,7 +165,7 @@ bool PawnMoveStrategy::canCaptureDiagonally(const ChessBoard& board,
  * @param pieceType  The character representing the piece type (e.g., 'P' for Pawn).
  * @return A vector of valid moves including captures and double-step advances from the initial position.
  */
-std::vector<Move> PawnMoveStrategy::generateMoves(const ChessBoard& board,
+std::vector<Move> PawnMoveStrategy::generateMoves(const IBoardState& board,
                                                   const std::pair<int, int>& from,
                                                   bool isWhite,
                                                   char pieceType) const {
@@ -175,7 +173,7 @@ std::vector<Move> PawnMoveStrategy::generateMoves(const ChessBoard& board,
     std::vector<Move> validMoves;
 
     // Validate starting position
-    if (!isValidPosition(from.first, from.second)) {
+    if (!board.isValidPosition(from.first, from.second)) {
         std::cerr << "Invalid pawn position: (" << from.first << "," << from.second << ")" << std::endl;
         return validMoves;
     }
@@ -209,14 +207,14 @@ std::vector<Move> PawnMoveStrategy::generateMoves(const ChessBoard& board,
  * @param isWhite    Indicates whether the pawn is white.
  * @param pieceType  The character representing the pawn piece type (e.g., 'P').
  */
-void PawnMoveStrategy::addForwardMoves(const ChessBoard& board,
+void PawnMoveStrategy::addForwardMoves(const IBoardState& board,
                                        std::vector<Move>& validMoves,
                                        const std::pair<int, int>& from,
                                        int row, int col, int direction,
                                        bool isWhite, char pieceType) const {
     // Single step forward
     int newRow = row + direction;
-    if (!isValidPosition(newRow, col)) {
+    if (!board.isValidPosition(newRow, col)) {
         return;
     }
 
@@ -227,7 +225,7 @@ void PawnMoveStrategy::addForwardMoves(const ChessBoard& board,
         bool onStartingRank = (isWhite && row == 1) || (!isWhite && row == 6);
         int twoStepRow = row + (2 * direction);
 
-        if (onStartingRank && isValidPosition(twoStepRow, col) && !board.isOccupied(twoStepRow, col)) {
+        if (onStartingRank && board.isValidPosition(twoStepRow, col) && !board.isOccupied(twoStepRow, col)) {
             validMoves.emplace_back(from, std::make_pair(twoStepRow, col), 0, pieceType);
         }
     }
@@ -247,20 +245,20 @@ void PawnMoveStrategy::addForwardMoves(const ChessBoard& board,
  * @param isWhite    Indicates whether the pawn is white.
  * @param pieceType  The character representing the pawn piece type (e.g., 'P').
  */
-void PawnMoveStrategy::addCaptureMoves(const ChessBoard& board,
+void PawnMoveStrategy::addCaptureMoves(const IBoardState& board,
                                        std::vector<Move>& validMoves,
                                        const std::pair<int, int>& from,
                                        int row, int col, int direction,
                                        bool isWhite, char pieceType) const {
     
     int newRow = row + direction;
-    if (!isValidPosition(newRow, col)) {
+    if (!board.isValidPosition(newRow, col)) {
         return;
     }
 
     for (int colOffset : {-1, 1}) {
         int newCol = col + colOffset;
-        if (!isValidPosition(newRow, newCol)) {
+        if (!board.isValidPosition(newRow, newCol)) {
             continue;
         }
 

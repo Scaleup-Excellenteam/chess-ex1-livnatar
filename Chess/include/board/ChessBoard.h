@@ -3,10 +3,11 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "IBoardState.h"
 #include "pieces/ChessPiece.h"
 #include "GameConstants.h" 
 
-class ChessBoard {
+class ChessBoard : public IBoardState {
 public:
 
     ChessBoard(const std::string& boardStr);
@@ -27,6 +28,7 @@ public:
     int checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const;
     void movePiece(const std::pair<int, int>& from, const std::pair<int, int>& to);
     void setupPieceAt(char pieceChar, const std::pair<int, int>& pos);
+    bool isValidPosition(int row, int col) const;
 
 private:
     std::vector<std::vector<std::unique_ptr<ChessPiece>>> m_board;
