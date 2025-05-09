@@ -308,9 +308,6 @@ void GameManager::setRecommendationDepth(int turns) {
 void GameManager::showRecommendations() {
     
     try {
-        std::cout << "\nRecommended moves for "
-            << (m_isWhiteTurn ? "White" : "Black")
-            << " player:" << std::endl;
 
         PriorityQueue<Move> recommendations = m_recommender.getRecommendations(m_isWhiteTurn);
 
@@ -318,15 +315,16 @@ void GameManager::showRecommendations() {
             throw NoMovesAvailableException();
         }
         else {
+            std::cout << "\nRecommended moves for " << (m_isWhiteTurn ? "White" : "Black") << " player:" << std::endl;
             // Use the overloaded << operator to display recommendations
             std::cout << recommendations << std::endl;
         }
     }
-    catch (const NoMovesAvailableException& ex) {
-        std::cout << ex.what() << std::endl;
+    catch (const NoMovesAvailableException& e) {
+        std::cout << e.what() << std::endl;
     }
-    catch (const std::exception& ex) {
-        std::cerr << "Error generating recommendations: " << ex.what() << std::endl;
+    catch (const std::exception& e) {
+        std::cerr << "Error generating recommendations: " << e.what() << std::endl;
     }
 }
 //------------------------------------------------------------------------
