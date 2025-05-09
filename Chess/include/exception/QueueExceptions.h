@@ -31,7 +31,7 @@ public:
      * @return Error message.
      */
     const char* what() const noexcept override {
-        return "Attempted to push into a full priority queue";
+        return "Attempted to push into a full priority queue with lower priority element";
     }
 };
 
