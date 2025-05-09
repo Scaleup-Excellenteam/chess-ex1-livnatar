@@ -1,7 +1,5 @@
 
 #include "strategies/KnightMoveStrategy.h"
-#include "board/ChessBoard.h"
-#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -12,7 +10,7 @@
  * @param to    Target position.
  * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
  */
-int KnightMoveStrategy::checkMovement(const ChessBoard& board,
+int KnightMoveStrategy::checkMovement(const IBoardState& board,
                                       const std::pair<int, int>& from,
                                       const std::pair<int, int>& to) const {
 
@@ -48,7 +46,7 @@ int KnightMoveStrategy::checkMovement(const ChessBoard& board,
  * @param pieceType  The character representing the piece type (e.g., 'N' for Knight).
  * @return A vector of valid moves including captures; excludes out-of-bounds positions.
  */
-std::vector<Move> KnightMoveStrategy::generateMoves(const ChessBoard& board,
+std::vector<Move> KnightMoveStrategy::generateMoves(const IBoardState& board,
                                                     const std::pair<int, int>& from,
                                                     bool isWhite,
                                                     char pieceType) const {
@@ -70,7 +68,7 @@ std::vector<Move> KnightMoveStrategy::generateMoves(const ChessBoard& board,
         int newCol = col + move.second ;
 
         // Check if the new position is on the board
-        if (isValidPosition(newRow,newCol)){
+        if (board.isValidPosition(newRow,newCol)){
 
             std::pair<int, int> to = { newRow, newCol };
 

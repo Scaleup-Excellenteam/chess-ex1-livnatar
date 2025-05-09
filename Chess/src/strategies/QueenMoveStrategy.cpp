@@ -1,7 +1,5 @@
 
 #include "strategies/QueenMoveStrategy.h"
-#include "board/ChessBoard.h"
-#include "move/Move.h"
 
 //------------------------------------------------------------------------
 /**
@@ -20,9 +18,9 @@ QueenMoveStrategy::QueenMoveStrategy(std::shared_ptr<MoveStrategy> rookStrategy,
  * @param to    Target position.
  * @return MOVE_SUCCESS if valid, MOVE_INVALID_OR_BLOCKED otherwise.
  */
-int QueenMoveStrategy::checkMovement(const ChessBoard& board,
-    const std::pair<int, int>& from,
-    const std::pair<int, int>& to) const {
+int QueenMoveStrategy::checkMovement(const IBoardState& board,
+                                     const std::pair<int, int>& from,
+                                     const std::pair<int, int>& to) const {
 
     // Try the rook movement (horizontal/vertical)
     int rookResult = m_rookStrategy->checkMovement(board, from, to);
@@ -46,7 +44,7 @@ int QueenMoveStrategy::checkMovement(const ChessBoard& board,
  * @param pieceType  The character representing the piece type (e.g., 'Q' for Queen).
  * @return A vector of valid moves including captures; combines rook and bishop moves.
  */
-std::vector<Move> QueenMoveStrategy::generateMoves(const ChessBoard& board,
+std::vector<Move> QueenMoveStrategy::generateMoves(const IBoardState& board,
                                                    const std::pair<int, int>& from,
                                                    bool isWhite,
                                                    char pieceType) const {
