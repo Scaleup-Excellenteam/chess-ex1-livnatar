@@ -6,6 +6,19 @@
 #include <climits> // For INT_MIN and INT_MAX
 #include "GameConstants.h"
 
+
+/**
+ * Minimal move representation for making/undoing moves during search.
+ * Lighter than Move class (no score/notation), optimized for memory and speed.
+ */
+struct MoveData {
+    std::pair<int, int> from;
+    std::pair<int, int> to;
+    char capturedPieceType;     // '#' if no piece was captured
+    bool capturedPieceColor;    // true for white, false for black
+ // bool wasFirstMove;          // For tracking special moves like castling
+};
+
 /**
  * Class responsible for analyzing the chess board and recommending
  * the best moves for a player.
