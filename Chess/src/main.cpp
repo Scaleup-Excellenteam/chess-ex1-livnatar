@@ -9,8 +9,8 @@ int main()
 	Chess a(board);
 	GameManager gameManager(board);   //create the manger of the game
 
-	//gameManager.promptUserForRecommendationTurns();	
-	//gameManager.showRecommendations(); // Show move recommendations before each turn
+	gameManager.promptUserForRecommendationTurns();	
+	gameManager.showRecommendations(); // Show move recommendations before each turn
 
 	int codeResponse = 0;
 	string res = a.getInput();
@@ -38,7 +38,7 @@ int main()
 
 		a.setCodeResponse(codeResponse);
 		res = a.getInput(); 
-		//gameManager.showRecommendations();
+		gameManager.showRecommendations();
 	}
 
 	cout << endl << "Exiting " << endl; 
