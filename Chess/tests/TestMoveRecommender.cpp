@@ -61,9 +61,9 @@ int main() {
     // - Rows are labeled a-h from top to bottom
     // - Columns are labeled 0-7 from left to right
 
-    runTest("Initial Position (depth 0)",
+    runTest("Initial Position (depth 2)",
         "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
-        true, 0);
+        true, 2);
 
     runTest("Initial Position (depth 1)",
         "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",

@@ -16,7 +16,11 @@ struct MoveData {
     std::pair<int, int> to;
     char capturedPieceType;     // '#' if no piece was captured
     bool capturedPieceColor;    // true for white, false for black
- // bool wasFirstMove;          // For tracking special moves like castling
+    // bool wasFirstMove;          // TODO: For tracking special moves like castling
+    
+    // Constructor to initialize the members
+    MoveData()
+        : from(0, 0), to(0, 0), capturedPieceType('#'), capturedPieceColor(false) {}
 };
 
 /**
@@ -38,14 +42,17 @@ private:
 
     std::vector<Move> generateAllMoves(bool isWhiteTurn, const ChessBoard& board) const;
     int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& boardCopy);
-    int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& boardCopy, const ChessPiece* capturedPiece = nullptr) const;
     int getPieceValue(char pieceType) const;
     bool isPieceInDanger(const std::pair<int, int>& pos, bool isWhitePiece, const ChessBoard& board) const;
     int evaluateThreats(const std::pair<int, int>& to, bool isWhiteTurn, const ChessBoard& boardCopy) const;
     int centerControlBonus(const std::pair<int, int>& pos) const;
     int calculateBoardControl(bool isWhiteTurn, const ChessBoard& board) const;
+    MoveData makeMoveAndGetData(const Move& move, ChessBoard& board);
+    void undoMove(const MoveData& data, ChessBoard& board);
+    int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& board,
+                         char capturedPieceType, bool capturedPieceColor) const;
 
     //int evaluateMove(const Move& move, bool isWhiteTurn, int depth,
-     //ChessBoard& boardCopy, int alpha = INT_MIN, int beta = INT_MAX);
+    //ChessBoard& boardCopy, int alpha = INT_MIN, int beta = INT_MAX);
     // Original evaluateMove - kept for compatibility
 };

@@ -1,72 +1,131 @@
-# Chess Move Recommendation System
+# Chess Move Recommender
 
-This project extends a previous chess game implementation by introducing a **templated priority queue** and a **move recommendation engine** that evaluates potential moves based on a scoring algorithm and suggests the best moves to the player.
+## Overview
 
----
+This project implements a chess move recommendation system that analyzes the board state and suggests the best moves for the current player. The system uses a minimax-like algorithm to evaluate moves by looking ahead several turns, considering both the immediate benefits of a move and potential future consequences.
 
-## Objectives
+## Algorithm Description
 
-- Use of templates (C++) for creating a generic priority queue.
-- Practice exception handling with custom exceptions.
-- Develop an intelligent algorithm to evaluate and recommend chess moves.
-- Explore recursive decision-making (lookahead) in a simplified chess AI.
+The move recommender uses a depth-limited minimax approach to evaluate chess moves:
 
----
+### Move Generation
 
-## Features Implemented
+For each piece belonging to the current player, all valid moves are generated.
+
+### Move Evaluation
+
+Each move is evaluated using a scoring system that considers:
+
+- **Capture Value**: Points for capturing opponent pieces (weighted by piece value)
+- **Piece Safety**: Penalties for putting pieces in danger, especially if threatened by lower-value pieces
+- **Threats Created**: Bonuses for threatening opponent pieces, with higher bonuses for threatening stronger pieces
+- **Center Control**: Bonuses for controlling the center of the board
+- **Board Control**: Points based on how many squares each player controls
+
+### Look-ahead Evaluation
+
+The algorithm recursively evaluates:
+
+- **Depth 0**: Immediate position evaluation
+- **Depth 1**: Opponent's best response (which minimizes our score)
+- **Depth 2**: Our best counter-response
+- And so on up to the specified depth
 
 ### Priority Queue
 
-- `PriorityQueue<T, Comparator>` class implemented with a custom comparator and fixed capacity.
-- Backed by `std::list` with manual sorted insertion.
-- Push: O(n) — sorted insert with comparator.
-- Poll: O(1) — front retrieval and removal.
-- Overloaded `<<` operator to show top 3 moves.
+The top 5 highest-scoring moves are maintained in a priority queue and recommended to the player.
 
-### Move Class
+## Optimization Techniques
 
-- Stores a move’s origin, destination, type (piece type), and score.
-- Overloads `<<` for display.
+The implementation uses several optimizations to improve performance:
 
-### Move Recommender
+### Board State Management
 
-- Evaluates all possible legal moves for a player and recursively checks future consequences up to a defined depth.
-- Calculates score based on:
-  - **Material gain/loss** (captures and threats)
-  - **Board control**
-  - **Center control**
-  - **Safety of the moving piece**
-- Top 5 best moves are tracked using the `PriorityQueue`.
+Instead of creating multiple copies of the chess board during recursive evaluation, the implementation:
 
-### Exception Handling
+- Creates a single copy of the board
+- Applies moves to this copy
+- Records sufficient information to undo the moves
+- Restores the board after evaluation
 
-Custom exceptions implemented:
+This significantly reduces memory usage and improves performance.
 
-- `QueueFullException`: when trying to insert into a full queue with a weaker move.
-- `QueueEmptyException`: when polling from an empty queue.
-- `NoMovesAvailableException`: when no legal moves exist for the current player.
+### Move Data Storage
+
+The `MoveData` structure stores information about moves, including captured pieces, to enable proper move undoing.
+
+## Complexity Analysis
+
+### Time Complexity
+
+The time complexity of the algorithm is **O(b^d)**, where:
+
+- `b` is the branching factor (average number of valid moves at each position, typically ~35 in chess)
+- `d` is the search depth (as specified in the assignment, `d = 2`)
+
+This corresponds to:
+
+- **Depth 0**: Current player's move
+- **Depth 1**: Opponent’s response
+- **Depth 2**: Current player's counter-response
+
+This results in evaluating up to **35^3 = 42,875** positions in the worst case (3 layers of move evaluation: root, opponent, response).
+
+### Space Complexity
+
+The optimized implementation has a space complexity of **O(b*d)**, where:
+
+- `b` represents the branching factor
+- `d` is the search depth
+
+This is achieved by using move/undo operations rather than creating new board copies at each level.
+
+## Bonus Features
+
+### Center Control
+
+The algorithm gives bonus points for moves that control central squares:
+
+- **+3 points** for controlling the 4 center squares (`d4`, `d5`, `e4`, `e5`)
+- **+1 point** for controlling the extended center (12 squares surrounding the center)
+
+### Board Coverage Analysis
+
+The implementation calculates how many squares each player controls and awards points based on the difference. This encourages moves that:
+
+- Maximize the player's board control
+- Minimize the opponent's control options
+
+## Exception Handling
+
+This project defines four custom exceptions that inherit from `std::exception`, used to handle invalid states during move recommendation and priority queue operations:
+
+### `InvalidTurnCountException`
+Thrown when an invalid number of turns (depth < 0) is requested. Ensures the algorithm has a valid lookahead depth.
+
+**Example message**:  
+`Invalid number of turns requested: 0. Must be 1 or more.`
 
 ---
 
-## Recommendation Algorithm (Overview)
+### `NoMovesAvailableException`
+Thrown when the current player has no valid moves (e.g., in stalemate or checkmate).
 
-### Step 1: Generate All Legal Moves
-- Scans the board for pieces of the current player and gathers all valid moves.
+**Message**:  
+`No valid moves available for the current player`
 
-### Step 2: Evaluate Moves
-Each move is scored based on:
-- Capturing an enemy piece (+value)
-- Threatening stronger pieces (+)
-- Being in danger (-)
-- Center control bonus
-- Coverage control bonus
+---
 
-### Step 3: Recursive Lookahead
-- Each move is simulated by copying the board and playing the move.
-- Then, the opponent's best response is recursively evaluated and subtracted from our score.
-- Optional depth up to 2 or 3 plies.
+### `QueueEmptyException`
+Thrown when trying to remove a move from an empty priority queue.
 
-### Step 4: Keep Top 5 Moves
-- Insert moves into a `PriorityQueue` based on score.
-- If the queue is full, ignore moves that don't beat the current weakest.
+**Message**:  
+`Attempted to poll from an empty priority queue`
 
+---
+
+### `QueueFullException`
+Thrown when trying to insert a lower-priority move into a full priority queue.
+
+**Message**:  
+`Attempted to push into a full priority queue with lower priority element`
