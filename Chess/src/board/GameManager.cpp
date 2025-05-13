@@ -317,7 +317,7 @@ void GameManager::showRecommendations() {
         else {
             std::cout << "\nRecommended moves for " << (m_isWhiteTurn ? "White" : "Black") << " player:" << std::endl;
             // Use the overloaded << operator to display recommendations
-            std::cout << recommendations << std::endl;
+            std::cout << recommendations;
         }
     }
     catch (const NoMovesAvailableException& e) {

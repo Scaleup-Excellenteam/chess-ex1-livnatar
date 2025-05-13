@@ -18,6 +18,8 @@ public:
     std::string fromNotation() const;
     std::string toNotation() const;
     std::string getNotation() const;
+   
+    friend std::ostream& operator<<(std::ostream& os, const Move& move);
 
 private:
     std::pair<int, int> m_from;
