@@ -16,7 +16,7 @@ smoothly within the project’s limits.
 */
 
 
-class GameManager {
+class GameManager{
 
 public:
     GameManager(const std::string& boardStr);

@@ -305,7 +305,7 @@ void GameManager::setRecommendationDepth(int turns) {
  * Shows the top 3 recommended moves for the current player.
  * Uses the overloaded << operator to display the recommendations.
  */
-void GameManager::showRecommendations() {
+void GameManager::showRecommendations(){
     
     try {
 
@@ -317,7 +317,7 @@ void GameManager::showRecommendations() {
         else {
             std::cout << "\nRecommended moves for " << (m_isWhiteTurn ? "White" : "Black") << " player:" << std::endl;
             // Use the overloaded << operator to display recommendations
-            std::cout << recommendations;
+            std::cout << recommendations << std::endl;
         }
     }
     catch (const NoMovesAvailableException& e) {
