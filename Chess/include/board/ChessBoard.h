@@ -22,13 +22,12 @@ public:
    
     ~ChessBoard() = default;
 
-
-    bool isOccupied(int row, int col) const;
-    const ChessPiece* getPieceAt(int row, int col) const;
+    bool isOccupied(int row, int col) const override;
+    const ChessPiece* getPieceAt(int row, int col) const override;
+    bool isValidPosition(int row, int col) const override;
     int checkMovement(const std::pair<int, int>& from, const std::pair<int, int>& to, bool isWhiteTurn) const;
     void movePiece(const std::pair<int, int>& from, const std::pair<int, int>& to);
     void setupPieceAt(char pieceChar, const std::pair<int, int>& pos);
-    bool isValidPosition(int row, int col) const;
 
 private:
     std::vector<std::vector<std::unique_ptr<ChessPiece>>> m_board;

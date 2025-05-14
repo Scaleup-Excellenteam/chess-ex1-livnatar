@@ -29,10 +29,6 @@ private:
 };
 
 //------------------------------------------------------------------------
-// Overload the << operator for Move to display it nicely
-std::ostream& operator<<(std::ostream& os, const Move& move);
-
-//------------------------------------------------------------------------
 // Specialization for MyComparator - forward declaration
 template <typename T>
 struct MyComparator;
