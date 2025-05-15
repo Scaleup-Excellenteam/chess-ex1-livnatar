@@ -8,11 +8,13 @@
 
 /*
 Input Handling Note:
-The Chess class provided handles user input and can't be modified.
-However, it doesn't catch all invalid inputs (e.g., wrong format or out-of-bounds).
-Since I can't add new response codes, I chose to return code 11 ("no piece at source")
-as a fallback for any unexpected or malformed input. This keeps the game running
-smoothly within the project’s limits.
+The Chess class provided handles most user input and cannot be modified.
+However, it does not catch all invalid inputs (such as wrong format or out-of-bounds moves).
+To ensure robust error handling, GameManager throws an InvalidPositionException 
+for invalid move formats or positions.
+All such exceptions are caught internally: an error message is printed to the user, 
+and code 11 ("no piece at source") is returned as a fallback for any unexpected or malformed input.
+This approach keeps the game running smoothly within the project’s constraints.
 */
 
 
