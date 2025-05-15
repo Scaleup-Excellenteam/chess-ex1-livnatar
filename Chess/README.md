@@ -129,3 +129,12 @@ Thrown when trying to insert a lower-priority move into a full priority queue.
 
 **Message**:  
 `Attempted to push into a full priority queue with lower priority element`
+
+---
+
+### `InvalidPositionException`
+Thrown when a move string is not in valid chess notation or refers to an out-of-bounds position.  
+This ensures that all move inputs are validated before processing.
+
+**Example message**:  
+`Invalid chess position: "e9"`
