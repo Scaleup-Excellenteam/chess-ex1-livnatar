@@ -55,4 +55,6 @@ private:
     //int evaluateMove(const Move& move, bool isWhiteTurn, int depth,
     //ChessBoard& boardCopy, int alpha = INT_MIN, int beta = INT_MAX);
     // Original evaluateMove - kept for compatibility
+
+    int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer = true);
 };
