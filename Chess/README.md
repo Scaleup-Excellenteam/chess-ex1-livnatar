@@ -33,7 +33,7 @@ The algorithm recursively evaluates:
 
 ### Priority Queue
 
-The top 5 highest-scoring moves are maintained in a priority queue and recommended to the player.
+The top 5 highest-scoring moves are maintained in a priority queue and the top 3 recommended to the player.
 
 ## Optimization Techniques
 
@@ -98,7 +98,7 @@ The implementation calculates how many squares each player controls and awards p
 
 ## Exception Handling
 
-This project defines four custom exceptions that inherit from `std::exception`, used to handle invalid states during move recommendation and priority queue operations:
+This project defines five custom exceptions that inherit from `std::exception`, used to handle invalid states during move recommendation and priority queue operations:
 
 ### `InvalidTurnCountException`
 Thrown when an invalid number of turns (depth < 0) is requested. Ensures the algorithm has a valid lookahead depth.
