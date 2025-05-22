@@ -50,9 +50,5 @@ private:
     void undoMove(const MoveData& data, ChessBoard& board);
     int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& board,
                          char capturedPieceType, bool capturedPieceColor) const;  
-
-
     int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingForWhite);
-
-    //int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer = true);
 };

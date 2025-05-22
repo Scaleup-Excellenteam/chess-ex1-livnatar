@@ -55,13 +55,13 @@ int main() {
     // Test 1: Basic capture evaluation
     // White queen can capture black queen (high value)
     runTest("test1",
-        "########"
+        "#B#####R"
         "########"
         "########"
         "####Q###"
         "###q####"
         "########"
-        "########"
+        "#####p##"
         "########",
         true, 2);  // Depth 0: Just evaluate immediate position
 
@@ -91,17 +91,16 @@ int main() {
         "######K#",
         true, 2);  // Depth 2: Look at opponent's response and your next move
 
-    // Test 4: Center control bonus test (comparing different moves)
     runTest("test4",
+        "######K#"
+        "#####Q##"
+        "B#######"
         "########"
+        "####r###"
         "########"
-        "########"
-        "########"
-        "#N######"
-        "########"
-        "########"
-        "########",
-        true, 2);  // Depth 0: Just evaluate immediate position with center bonus
+        "##n#####"
+        "######k#",
+        true, 2);
 
     // Test 5: Test piece safety and board control
     // Both sides have multiple pieces for board control calculation
@@ -202,6 +201,31 @@ int main() {
         "####r###"
         "########",
         true, 2);
+   
+    runTest("test13",
+        "######K#"
+        "#####Q##"
+        "B#######"
+        "########"
+        "####r###"
+        "########"
+        "##n#####"
+        "######k#",
+        false, 2);
+
+    // Test 5: Test piece safety and board control
+    // Both sides have multiple pieces for board control calculation
+    runTest("test14",
+        "##b#####"
+        "#P######"
+        "########"
+        "###QN###"
+        "####r###"
+        "#####P##"
+        "########"
+        "########",
+        false, 2);  // Depth 1 evaluation with board control
+
     return 0;
 }
 

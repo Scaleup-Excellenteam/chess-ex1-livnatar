@@ -221,7 +221,8 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, ChessB
     // 2. Check if our piece is in danger after the move
     if (isPieceInDanger(to, isWhiteTurn, board)) {
         int movedPieceValue = getPieceValue(movedPiece->getPieceType());
-        score -= movedPieceValue; // Penalty for putting piece in danger 
+        //score -= movedPieceValue; // Penalty for putting piece in danger 
+        score -= movedPieceValue;// / 2;
     }
 
     // 3. Bonus for threatening opponent pieces after the move
@@ -335,7 +336,8 @@ int MoveRecommender::evaluateThreats(const std::pair<int, int>& to, bool isWhite
 
             if (targetValue > movedPieceValue) {
                 // Threatening a stronger piece
-                threatBonus += targetValue;
+                //threatBonus += targetValue;
+                threatBonus += targetValue / 2;  // About 0.5% of piece value
                
             }
             else if (targetValue == movedPieceValue) {
@@ -421,7 +423,8 @@ int MoveRecommender::calculateBoardControl(bool isWhiteTurn, const ChessBoard& b
     }
 
     // Return the difference (positive is good for us)
-    return ourControl - opponentControl;
+    //return ourControl - opponentControl;
+    return (ourControl - opponentControl) / 4;
 }
 //------------------------------------------------------------------------
 /**
