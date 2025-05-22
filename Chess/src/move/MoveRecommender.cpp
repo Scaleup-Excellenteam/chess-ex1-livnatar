@@ -43,7 +43,10 @@ PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
         // For each move, evaluate on our copy and restore the board after
         for (auto& move : allMoves) {
 
-            int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy,true);
+            // Past: int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy,true);  
+
+            int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy, isWhiteTurn);
+
             move.setScore(score);
 
             try {
@@ -101,26 +104,28 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const Ches
 
     return allMoves;
 }
+
 //------------------------------------------------------------------------
 /**
-* Calculate score for a potential move with recursive minimax algorithm
+* Recursively evaluates a move using minimax, simulating future moves up to a given depth.
 *
-* @param move The move to evaluate
-* @param isWhiteTurn True if it's white's turn (color of player making this move)
-* @param depth Search depth (remaining moves to evaluate)
-* @param board The current board state
-* @param isMaximizingPlayer True if evaluating from maximizing player's perspective (our side)
-* @return The evaluation score for the move
+* @param move Move to evaluate
+* @param isWhiteTurn True if white's turn
+* @param depth Remaining search depth
+* @param board Board state (modified during evaluation)
+* @param isMaximizingForWhite True if maximizing for white
+* @return Evaluation score from the maximizing player's perspective
 */
-int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer) {
-    
+
+int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth,
+    ChessBoard& board, bool isMaximizingForWhite) {
+
     // Make the move and save data for undoing
     MoveData moveData = makeMoveAndGetData(move, board);
 
     // Get the moved piece after the move
     const ChessPiece* movedPiece = board.getPieceAt(moveData.to.first, moveData.to.second);
     if (!movedPiece) {
-        // Undo the move if something went wrong
         undoMove(moveData, board);
         return MOVE_ERROR;
     }
@@ -128,49 +133,61 @@ int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth,
     // Calculate immediate score for this position
     int positionScore = evaluatePosition(move, isWhiteTurn, board, moveData.capturedPieceType, moveData.capturedPieceColor);
 
-    // Base case: if depth is 0, return immediate position score
+    // Base case: if depth is 0, return immediate position score from correct perspective
     if (depth <= 0) {
         undoMove(moveData, board);
-        return isMaximizingPlayer ? positionScore : -positionScore; // Negate if opponent's perspective
+
+        // If the current player is the one we're maximizing for, return positive score
+        // If the current player is the opponent, return negative score
+        return (isWhiteTurn == isMaximizingForWhite) ? positionScore : -positionScore;
     }
 
     // Generate next player's possible moves
     bool nextPlayerTurn = !isWhiteTurn;
     std::vector<Move> nextPlayerMoves = generateAllMoves(nextPlayerTurn, board);
 
-    // Handle no moves case
+    // Handle no moves case (checkmate/stalemate)
     if (nextPlayerMoves.empty()) {
         undoMove(moveData, board);
-        return isMaximizingPlayer ? positionScore + 50 : -positionScore - 50;
+
+        // Adjust position score based on perspective
+        int adjustedPositionScore = (isWhiteTurn == isMaximizingForWhite) ? positionScore : -positionScore;
+
+        // Add game ending bonus - if we caused the game to end, it's good for us
+        int gameEndBonus = (isWhiteTurn == isMaximizingForWhite) ? 500 : -500;
+        return adjustedPositionScore + gameEndBonus;
     }
+
+    // Determine if next level should maximize or minimize
+    bool nextLevelMaximizing = (nextPlayerTurn == isMaximizingForWhite);
 
     int bestScore;
 
-    if (isMaximizingPlayer) {
-        // Our turn, we want to maximize score
+    if (nextLevelMaximizing) {
+        // Next player is the one we're optimizing for - they want to maximize
         bestScore = INT_MIN;
-
         for (const auto& nextMove : nextPlayerMoves) {
-            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, false);
+            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, isMaximizingForWhite);
             bestScore = std::max(bestScore, nextMoveScore);
         }
     }
     else {
-        // Opponent's turn, they want to minimize our score
+        // Next player is the opponent - they want to minimize our score
         bestScore = INT_MAX;
-
         for (const auto& nextMove : nextPlayerMoves) {
-            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, true);
+            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, isMaximizingForWhite);
             bestScore = std::min(bestScore, nextMoveScore);
         }
     }
 
-    // Undo the move before returning
     undoMove(moveData, board);
 
-    // Return position score plus best continuation
-    return isMaximizingPlayer ? positionScore + bestScore : -positionScore + bestScore;
+    // Combine immediate score with future best score
+    int adjustedPositionScore = (isWhiteTurn == isMaximizingForWhite) ? positionScore : -positionScore;
+
+    return adjustedPositionScore + bestScore;
 }
+
 
 //------------------------------------------------------------------------
 /**
@@ -204,7 +221,7 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, ChessB
     // 2. Check if our piece is in danger after the move
     if (isPieceInDanger(to, isWhiteTurn, board)) {
         int movedPieceValue = getPieceValue(movedPiece->getPieceType());
-        score -= movedPieceValue; // Penalty for putting piece in danger
+        score -= movedPieceValue; // Penalty for putting piece in danger 
     }
 
     // 3. Bonus for threatening opponent pieces after the move
@@ -267,21 +284,19 @@ bool MoveRecommender::isPieceInDanger(const std::pair<int, int>& pos, bool isWhi
                 // Check if this opponent piece can attack our piece
                 if (piece->checkMovement(board, pos) == MOVE_SUCCESS) {
                     
+                    /*
+                    // We're especially concerned when a lower-value piece threatens our higher-value piece
                     int attackerValue = getPieceValue(piece->getPieceType());
 
-                    // We're especially concerned when a lower-value piece threatens our higher-value piece
                     if (attackerValue < targetValue) {
                         return true;
                     }
+                    */
+
+                    // Check if this opponent piece can attack our piece
+                    return true;
                     
                 }
-                /*
-                // Check if this opponent piece can attack our piece
-                if (board.checkMovement(opponentPos, pos, !isWhitePiece) == MOVE_SUCCESS) {
-                    // Per assignment requirements - any threat is considered danger
-                    return true;
-                }
-                */
             }
         }
     }
@@ -320,7 +335,8 @@ int MoveRecommender::evaluateThreats(const std::pair<int, int>& to, bool isWhite
 
             if (targetValue > movedPieceValue) {
                 // Threatening a stronger piece
-                threatBonus += 5;
+                threatBonus += targetValue;
+               
             }
             else if (targetValue == movedPieceValue) {
                 // Threatening an equal piece
@@ -345,7 +361,8 @@ int MoveRecommender::centerControlBonus(const std::pair<int, int>& pos) const {
 
     // Center squares are rows 3-4, columns 3-4 (0-indexed)
     if ((pos.first >= 3 && pos.first <= 4) && (pos.second >= 3 && pos.second <= 4)) {
-        return 3; // Higher bonus for direct center control
+       // return 3; // Higher bonus for direct center control
+        return 2; 
     }
     // Extended center (rows 2-5, columns 2-5)
     else if ((pos.first >= 2 && pos.first <= 5) && (pos.second >= 2 && pos.second <= 5)) {
@@ -474,3 +491,83 @@ int MoveRecommender::getDepth() const {
 void MoveRecommender::setDepth(int depth) {
     m_depth = depth;
 }
+
+
+
+//------------------------------------------------------------------------
+
+
+
+/**
+* Calculate score for a potential move with recursive minimax algorithm
+*
+* @param move The move to evaluate
+* @param isWhiteTurn True if it's white's turn (color of player making this move)
+* @param depth Search depth (remaining moves to evaluate)
+* @param board The current board state
+* @param isMaximizingPlayer True if evaluating from maximizing player's perspective (our side)
+* @return The evaluation score for the move
+*/
+
+/*
+int MoveRecommender::evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer) {
+
+    // Make the move and save data for undoing
+    MoveData moveData = makeMoveAndGetData(move, board);
+
+    // Get the moved piece after the move
+    const ChessPiece* movedPiece = board.getPieceAt(moveData.to.first, moveData.to.second);
+    if (!movedPiece) {
+        // Undo the move if something went wrong
+        undoMove(moveData, board);
+        return MOVE_ERROR;
+    }
+
+    // Calculate immediate score for this position
+    int positionScore = evaluatePosition(move, isWhiteTurn, board, moveData.capturedPieceType, moveData.capturedPieceColor);
+
+    // Base case: if depth is 0, return immediate position score
+    if (depth <= 0) {
+        undoMove(moveData, board);
+        return isMaximizingPlayer ? positionScore : -positionScore; // Negate if opponent's perspective
+    }
+
+    // Generate next player's possible moves
+    bool nextPlayerTurn = !isWhiteTurn;
+    std::vector<Move> nextPlayerMoves = generateAllMoves(nextPlayerTurn, board);
+
+    // Handle no moves case
+    if (nextPlayerMoves.empty()) {
+        undoMove(moveData, board);
+        return isMaximizingPlayer ? positionScore + 50 : -positionScore - 50;
+    }
+
+    int bestScore;
+
+    if (isMaximizingPlayer) {
+        // Our turn, we want to maximize score
+        bestScore = INT_MIN;
+
+        for (const auto& nextMove : nextPlayerMoves) {
+            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, false);
+            bestScore = std::max(bestScore, nextMoveScore);
+        }
+    }
+    else {
+        // Opponent's turn, they want to minimize our score
+        bestScore = INT_MAX;
+
+        for (const auto& nextMove : nextPlayerMoves) {
+            int nextMoveScore = evaluateMove(nextMove, nextPlayerTurn, depth - 1, board, true);
+            bestScore = std::min(bestScore, nextMoveScore);
+        }
+    }
+
+    // Undo the move before returning
+    undoMove(moveData, board);
+
+    // Return position score plus best continuation
+    return isMaximizingPlayer ? positionScore + bestScore : -positionScore + bestScore;
+}
+
+*/

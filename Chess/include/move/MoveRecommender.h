@@ -41,7 +41,6 @@ private:
     PriorityQueue<Move> m_recommendations;
 
     std::vector<Move> generateAllMoves(bool isWhiteTurn, const ChessBoard& board) const;
-    int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer = true);
     int getPieceValue(char pieceType) const;
     bool isPieceInDanger(const std::pair<int, int>& pos, bool isWhitePiece, const ChessBoard& board) const;
     int evaluateThreats(const std::pair<int, int>& to, bool isWhiteTurn, const ChessBoard& boardCopy) const;
@@ -51,4 +50,9 @@ private:
     void undoMove(const MoveData& data, ChessBoard& board);
     int evaluatePosition(const Move& move, bool isWhiteTurn, ChessBoard& board,
                          char capturedPieceType, bool capturedPieceColor) const;  
+
+
+    int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingForWhite);
+
+    //int evaluateMove(const Move& move, bool isWhiteTurn, int depth, ChessBoard& board, bool isMaximizingPlayer = true);
 };
