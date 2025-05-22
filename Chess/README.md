@@ -18,9 +18,9 @@ Each move is evaluated using a scoring system that considers:
 
 - **Capture Value**: Points for capturing opponent pieces (weighted by piece value)
 - **Piece Safety**: Penalties for putting pieces in danger, especially if threatened by lower-value pieces
-- **Threats Created**: Bonuses for threatening opponent pieces, with higher bonuses for threatening stronger pieces
-- **Center Control**: Bonuses for controlling the center of the board
-- **Board Control**: Points based on how many squares each player controls
+- **Threats Created**: Bonuses for threatening opponent pieces. Threatening stronger pieces gives higher bonuses (up to half their value), while threatening weaker pieces gives minimal bonuses.
+- **Center Control**: +2 points for central 4 squares, +1 point for extended center.
+- **Board Control**: The difference between the number of squares controlled by each player, scaled down to reduce overall weight in the final score.
 
 ### Look-ahead Evaluation
 
@@ -30,6 +30,8 @@ The algorithm recursively evaluates:
 - **Depth 1**: Opponent's best response (which minimizes our score)
 - **Depth 2**: Our best counter-response
 - And so on up to the specified depth
+
+All scores are computed from the maximizing player's perspective, meaning opponent moves subtract value and our responses add value accordingly.
 
 ### Priority Queue
 
@@ -86,7 +88,7 @@ This is achieved by using move/undo operations rather than creating new board co
 
 The algorithm gives bonus points for moves that control central squares:
 
-- **+3 points** for controlling the 4 center squares (`d4`, `d5`, `e4`, `e5`)
+- **+2 points** for controlling the 4 center squares (`d4`, `d5`, `e4`, `e5`)
 - **+1 point** for controlling the extended center (12 squares surrounding the center)
 
 ### Board Coverage Analysis
