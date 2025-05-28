@@ -52,62 +52,160 @@ void runTest(const std::string& testName, const std::string& boardStr, bool isWh
 }
 
 int main() {
-    // All board strings must be exactly 64 characters long
 
-    // Note: With your board representation:
-    // - Uppercase = White pieces
-    // - Lowercase = Black pieces 
-    // - Board is represented as a 64-character string read from top-left to bottom-right
-    // - Rows are labeled a-h from top to bottom
-    // - Columns are labeled 0-7 from left to right
+    runTest("test1",
+        "#B#####R"
+        "########"
+        "########"
+        "####Q###"
+        "###q####"
+        "########"
+        "#####p##"
+        "########",
+        true, 2);  
 
-    runTest("Initial Position (depth 0)",
-        "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
-        true, 0);
+    runTest("test2",
+        "########"
+        "########"
+        "########"
+        "####Q###"
+        "###q####"
+        "##pp####"
+        "########"
+        "########",
+        true, 2); 
 
-    runTest("Initial Position (depth 1)",
-        "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr",
-        true, 1);
+    runTest("test3",
+        "######k#"
+        "#####q##"
+        "########"
+        "########"
+        "####N###"
+        "########"
+        "########"
+        "######K#",
+        true, 2); 
 
-    runTest("Mid-Game Capture Scenario",
-        "R#BQKBNRP#PPPPPP#P####P#########n#######P#####Ppppp#ppp#rnbqkb#r",
-        true, 1);
+    runTest("test4",
+        "######K#"
+        "#####Q##"
+        "B#######"
+        "########"
+        "####r###"
+        "########"
+        "##n#####"
+        "######k#",
+        true, 2);
 
-    runTest("Check Threat Evaluation",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+    runTest("test5",
+        "##b#####"
+        "#P######"
+        "########"
+        "###QN###"
+        "####r###"
+        "#####P##"
+        "########"
+        "########",
+        true, 2);  
+
+    runTest("test6",
+        "########"
+        "########"
+        "########"
+        "###n####"
+        "#####Q##"
+        "######R#"
+        "########"
+        "########",
+        false, 2);  
+
+    runTest("test7",
+        "########"
+        "########"
+        "###b####"
+        "########"
+        "#####P##"
+        "########"
+        "######P#"
+        "#######R",
+        true, 2);  
+
+    runTest("test8",
+        "########"
+        "########"
+        "####b###"
+        "###N####"
+        "#####p##"
+        "########"
+        "########"
+        "########",
+        true, 2); 
+
+    runTest("test9",
+        "RNBQKBNR"
+        "PPPPPPPP"
+        "########"
+        "########"
+        "########"
+        "########"
+        "pppppppp"
+        "rnbqkbnr",
+        true, 2);  
+
+    runTest("test10",
+        "RNBQKBNR"
+        "PPP#PPPP"
+        "########"
+        "###P####"
+        "########"
+        "########"
+        "pppppppp"
+        "rnbqkbnr",
+        false, 2);  
+
+    runTest("test11",
+        "########"
+        "########"
+        "###r####"
+        "##n#####"
+        "####Q###"
+        "#####p##"
+        "########"
+        "########",
+        true, 2); 
+
+    runTest("test12",
+        "####K###"
+        "######R#"
+        "########"
+        "########"
+        "###Q##bk"
+        "########"
+        "####r###"
+        "########",
+        true, 2);
+   
+    runTest("test13",
+        "######K#"
+        "#####Q##"
+        "B#######"
+        "########"
+        "####r###"
+        "########"
+        "##n#####"
+        "######k#",
         false, 2);
 
-    runTest("Depth 0 Evaluation",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 0);
-
-    runTest("Depth 1 Evaluation",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
-        false, 1);
-
-    runTest("Depth 2 Evaluation",
-        "R#BQKBNRPPPPPPPP############q###################pppp#ppprnb#kb#r",
+    runTest("test14",
+        "##b#####"
+        "#P######"
+        "########"
+        "###QN###"
+        "####r###"
+        "#####P##"
+        "########"
+        "########",
         false, 2);
-
-    runTest("Simple Endgame Position",
-        "####K###############################################R#k#########",
-        true, 2);
-
-    runTest("Material Advantage Position",
-        "R#BQK##R#PPPPPPP########n######################p###pppp#r#b#kb#r",
-        true, 2);
-
-    runTest("Pawn Promotion Scenario",
-        "#######P############################################k##########K",
-        true, 2);
-
-    runTest("Stalemate Detection",
-        "#######k############################################K###########",
-        false, 2);
-
-    runTest("Checkmate Detection",
-        "#######k############################################Q##########K",
-        true, 2);
 
     return 0;
 }

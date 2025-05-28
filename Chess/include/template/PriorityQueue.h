@@ -20,21 +20,6 @@ struct MyComparator {
 
 //------------------------------------------------------------------------
 /**
- * Forward declaration of PriorityQueue class.
- */
-//template <typename T, typename Comparator>
-//class PriorityQueue;
-
-//------------------------------------------------------------------------
-/**
- * Forward declaration of stream insertion operator for PriorityQueue.
- */
-//template <typename T, typename Comparator>
-//std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue);
-
-
-//------------------------------------------------------------------------
-/**
  * Template class representing a fixed-size priority queue.
  * Elements are ordered based on a provided comparator.
  */
@@ -50,20 +35,9 @@ public:
     size_t size() const;
     const std::list<T>& getElements() const;
     
-    friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue){
-
-        int count = 1;
-        for (const auto& element : queue.m_elements) {
-            os << count << ". " << element << "\n";
-            count++;
-
-            // Break after printing 3 top elements
-            if (count > 3) {
-                break;
-            }
-        }
-        return os;
-    }
+    // Declare the friend template function
+    template <typename U, typename C>
+    friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<U, C>& queue);
 
 private:
     std::list<T> m_elements;
@@ -176,23 +150,25 @@ const std::list<T>& PriorityQueue<T, Comparator>::getElements() const {
 
 //------------------------------------------------------------------------
 /**
-* Overloads the << operator to print the contents of the 3 top elements in the queue.
-*/
-
-/*
+ * Stream insertion operator for displaying the top 3 elements in the priority queue.
+ * Implemented as a friend function for direct access to queue elements.
+ *
+ * @param os The output stream
+ * @param queue The priority queue to display
+ * @return Reference to the output stream
+ */
 template <typename T, typename Comparator>
 std::ostream& operator<<(std::ostream& os, const PriorityQueue<T, Comparator>& queue) {
    
-    os << "Priority Queue Contents:\n";
     int count = 1;
     for (const auto& element : queue.m_elements) {
         os << count << ". " << element << "\n";
         count++;
 
-        // Break after printing 3 top elements
+        // Display only top 3 elements as required by the assignment
         if (count > 3) {
             break;
         }
     }
     return os;
-}*/
+}

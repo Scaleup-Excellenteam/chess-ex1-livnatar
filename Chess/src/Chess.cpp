@@ -281,7 +281,7 @@ Chess::Chess(const string& start)
 }
 
 // get the source and destination 
-string Chess::getInput()
+string Chess::getInput(std::function<void()> showRecommendationsCallback)
 {
 	static bool isFirst = true;
 
@@ -291,6 +291,12 @@ string Chess::getInput()
 		doTurn(); 
 
 	displayBoard();
+
+	// Call the passed function to show recommendations
+	if (showRecommendationsCallback) {
+		showRecommendationsCallback();
+	}
+
 	showAskInput();
 
 	cin >> m_input;

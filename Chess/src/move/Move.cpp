@@ -97,14 +97,18 @@ std::string Move::getNotation() const {
 //------------------------------------------------------------------------
 /**
  * Stream operator for printing a Move object.
+ * Implemented as a non-member friend function for better encapsulation.
  *
  * @param os The output stream to print to.
  * @param move The Move object to be printed.
  * @return The output stream with the move details.
  */
 std::ostream& operator<<(std::ostream& os, const Move& move) {
-
-    os << move.fromNotation() << " -> " << move.toNotation()
-        << " (Score: " << move.getScore() << ", Piece: " << move.getPieceType() << ")";
+   
+    os << move.fromNotation() << " -> " << move.toNotation();
+       
+    // For Debug:
+    // << " (Score: " << move.getScore() << ", Piece: " << move.getPieceType() << ")";
+   
     return os;
 }

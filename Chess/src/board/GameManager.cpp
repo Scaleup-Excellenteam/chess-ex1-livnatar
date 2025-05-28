@@ -5,6 +5,7 @@
 #include "factories/PieceFactory.h"
 #include "exception/InvalidTurnCountException.h"
 #include "exception/MoveExceptions.h"
+#include "exception/InvalidPositionException.h"
 
 //------------------------------------------------------------------------
 /**
@@ -21,14 +22,17 @@ GameManager::GameManager(const std::string& boardStr)
     m_recommendationDepth(2) {}
 
 //------------------------------------------------------------------------
-/**
- * Converts a position from chess notation (e.g., "e2") to board coordinates.
- * @param pos The position in chess notation.
- * @return A pair of integers representing (row, column) or (-1, -1) if invalid.
- */
+ /**
+  * Converts a position from chess notation (e.g., "e2") to board coordinates.
+  * @param pos The position in chess notation.
+  * @return A pair of integers representing (row, column).
+  * @throws InvalidPositionException If the input is not valid chess notation.
+  */
 std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
    
-    if (pos.size() != 2) return { -1, -1 };
+    if (pos.size() != 2) {
+        throw InvalidPositionException(pos);
+    }
 
     if( ( (('A' <= pos[0]) && (pos[0] <= 'H')) || (('a' <= pos[0]) && (pos[0] <= 'h'))) &&
         (('1' <= pos[1]) && (pos[1] <= '8')) ){
@@ -42,49 +46,58 @@ std::pair<int, int> GameManager::convertPosition(const std::string& pos) const {
         return { row, col };    
     }
 
-    return { -1, -1 };  // no need to get here - Chess class check for invalid input
+    throw InvalidPositionException(pos);  // no need to get here - Chess class check for invalid input
 }
 //------------------------------------------------------------------------
 /**
  * Validates and processes a move.
  * If the move is legal and doesn't result in self-check, it is executed.
+ * If the move format or position is invalid, an error message is printed and an error code is returned.
+ *
  * @param move The move string in standard format (e.g., "e2e4").
  * @return Status code indicating the move result.
+ *         Returns MOVE_NO_PIECE_IN_SOURCE if the move format or position is invalid.
+ * @throws None. All exceptions are handled internally; errors are reported via return code and error message.
  */
 int GameManager::checkMovement(const std::string& move) {
-    
-    //Invalid format - treat as code 11 - not need to happen cause we check in Chess class
-    if (move.size() != 4) {
-        return MOVE_NO_PIECE_IN_SOURCE; 
-    }
 
-    std::pair<int, int> from = convertPosition(move.substr(0, 2));
-    std::pair<int, int> to = convertPosition(move.substr(2, 2));
-
-    //Step 1: Call ChessBoard to validate the move
-    int moveStatus = m_chessBoard->checkMovement(from, to, m_isWhiteTurn);
-
-    //Step 2: If move is valid, perform it and check results
-    if (moveStatus == MOVE_SUCCESS) {
-        
-        makeMove(from, to);
-
-        // Step 3: Ensure the move does not put the player in check - code 31
-        if (isCheck()) {
-            undoLastMove(from, to);  
-            return MOVE_CAUSES_CHECK;           
+    try {
+        //Invalid format - not need to happen cause we check in Chess class
+        if (move.size() != 4) {
+            throw InvalidPositionException(move);
         }
 
-        // Step 4: Check if this move puts the opponent in check - code 41
-        int finalMoveStatus = checkOpponentInCheck();
+        std::pair<int, int> from = convertPosition(move.substr(0, 2));
+        std::pair<int, int> to = convertPosition(move.substr(2, 2));
 
-        //If everything is valid, switch turn
-        switchTurn();
+        //Step 1: Call ChessBoard to validate the move
+        int moveStatus = m_chessBoard->checkMovement(from, to, m_isWhiteTurn);
 
-        return finalMoveStatus;
+        //Step 2: If move is valid, perform it and check results
+        if (moveStatus == MOVE_SUCCESS) {
+
+            makeMove(from, to);
+
+            // Step 3: Ensure the move does not put the player in check - code 31
+            if (isCheck()) {
+                undoLastMove(from, to);
+                return MOVE_CAUSES_CHECK;
+            }
+
+            // Step 4: Check if this move puts the opponent in check - code 41
+            int finalMoveStatus = checkOpponentInCheck();
+
+            //If everything is valid, switch turn
+            switchTurn();
+
+            return finalMoveStatus;
+        }
+        return moveStatus;
     }
-
-    return moveStatus;
+    catch (const InvalidPositionException& ex) {
+        std::cerr << ex.what() << std::endl;
+        return MOVE_NO_PIECE_IN_SOURCE;
+    }        
 }
 
 
@@ -305,7 +318,7 @@ void GameManager::setRecommendationDepth(int turns) {
  * Shows the top 3 recommended moves for the current player.
  * Uses the overloaded << operator to display the recommendations.
  */
-void GameManager::showRecommendations() {
+void GameManager::showRecommendations(){
     
     try {
 

@@ -20,5 +20,6 @@ const int BISHOP_VALUE = 3;
 const int ROOK_VALUE = 5;
 const int QUEEN_VALUE = 9;
 const int KING_VALUE = 100;
+const int MOVE_ERROR = -1000;
 
 const int BOARD_SIZE = 8;
