@@ -106,7 +106,9 @@ std::string Move::getNotation() const {
 std::ostream& operator<<(std::ostream& os, const Move& move) {
    
     os << move.fromNotation() << " -> " << move.toNotation();
-       // << " (Score: " << move.getScore() << ", Piece: " << move.getPieceType() << ")";
+       
+    // For Debug:
+    // << " (Score: " << move.getScore() << ", Piece: " << move.getPieceType() << ")";
    
     return os;
 }
