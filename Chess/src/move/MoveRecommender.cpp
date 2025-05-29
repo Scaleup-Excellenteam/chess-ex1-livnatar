@@ -29,7 +29,6 @@ PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
         // Clear previous recommendations 
         m_recommendations = PriorityQueue<Move>(5);
 
-        // Generate all possible moves
         std::vector<Move> allMoves = generateAllMoves(isWhiteTurn, m_board);
 
         // If no moves are available, throw an exception
@@ -37,13 +36,10 @@ PriorityQueue<Move> MoveRecommender::getRecommendations(bool isWhiteTurn) {
             throw NoMovesAvailableException();
         }
 
-        // Use a single board for all evaluations - Only create one copy
         ChessBoard boardCopy(m_board);
 
         // For each move, evaluate on our copy and restore the board after
         for (auto& move : allMoves) {
-
-            // Past: int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy,true);  
 
             int score = evaluateMove(move, isWhiteTurn, m_depth, boardCopy, isWhiteTurn);
 
@@ -94,9 +90,7 @@ std::vector<Move> MoveRecommender::generateAllMoves(bool isWhiteTurn, const Ches
                 std::pair<int, int> pos = { row, col };
 
                 // Get all valid moves directly from the piece
-                 std::vector<Move> pieceMoves = piece->generateValidMoves(board);
-
-                // Add them to our collection
+                std::vector<Move> pieceMoves = piece->generateValidMoves(board);
                 allMoves.insert(allMoves.end(), pieceMoves.begin(), pieceMoves.end());
             }
         }
@@ -221,8 +215,7 @@ int MoveRecommender::evaluatePosition(const Move& move, bool isWhiteTurn, ChessB
     // 2. Check if our piece is in danger after the move
     if (isPieceInDanger(to, isWhiteTurn, board)) {
         int movedPieceValue = getPieceValue(movedPiece->getPieceType());
-        //score -= movedPieceValue; // Penalty for putting piece in danger 
-        score -= movedPieceValue;// / 2;
+        score -= movedPieceValue;
     }
 
     // 3. Bonus for threatening opponent pieces after the move
@@ -366,7 +359,7 @@ int MoveRecommender::centerControlBonus(const std::pair<int, int>& pos) const {
     }
     // Extended center (rows 2-5, columns 2-5)
     else if ((pos.first >= 2 && pos.first <= 5) && (pos.second >= 2 && pos.second <= 5)) {
-        return 1; // Smaller bonus for extended center
+        return 1; 
     }
     return 0;
 }
@@ -436,7 +429,7 @@ MoveData MoveRecommender::makeMoveAndGetData(const Move& move, ChessBoard& board
     MoveData data;
     data.from = move.getFrom();
     data.to = move.getTo();
-    data.capturedPieceType = '#';  // Default: no piece captured
+    data.capturedPieceType = '#'; 
 
     // Store information about the piece that will be captured (if any)
     const ChessPiece* targetPiece = board.getPieceAt(data.to.first, data.to.second);
